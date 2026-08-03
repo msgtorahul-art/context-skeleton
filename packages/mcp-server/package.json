@@ -1,0 +1,21 @@
+{
+  "name": "@context-skeleton/mcp-server",
+  "version": "1.0.0",
+  "description": "Model Context Protocol (MCP) Server for ContextSkeleton",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "context-skeleton-mcp": "./bin/mcp-server.js"
+  },
+  "dependencies": {
+    "@context-skeleton/core": "*"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude-code",
+    "cursor"
+  ],
+  "author": "Antigravity CEO",
+  "license": "MIT"
+}

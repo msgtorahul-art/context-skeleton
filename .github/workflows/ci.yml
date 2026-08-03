@@ -1,0 +1,21 @@
+name: ContextSkeleton CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run Core Unit Tests
+        run: npm test
+      - name: Verify CLI Command
+        run: node packages/cli/bin/context-skeleton.js scan packages/core

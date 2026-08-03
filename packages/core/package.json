@@ -1,0 +1,20 @@
+{
+  "name": "@context-skeleton/core",
+  "version": "1.0.0",
+  "description": "Core AST Skeletonizer Engine for code context pruning and token estimation",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node --test test/index.test.js"
+  },
+  "keywords": [
+    "ast",
+    "parser",
+    "skeletonizer"
+  ],
+  "author": "Antigravity CEO",
+  "license": "MIT"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@context-skeleton/web",
+  "version": "1.0.0",
+  "description": "Interactive Web Visualizer and Product Landing Page for ContextSkeleton",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "keywords": [
+    "web",
+    "playground",
+    "landing-page"
+  ],
+  "author": "Antigravity CEO",
+  "license": "MIT"
+}

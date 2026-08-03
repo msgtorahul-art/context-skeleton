@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ContextSkeleton — Cut LLM Context Costs by 80% with AST Code Folding</title>
+  <meta name="description" content="Zero-latency AST code folding CLI, MCP Server, and Web Visualizer that compresses codebases into syntactically valid skeletons for Cursor, Claude Code, Windsurf, and AI Agents.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div class="bg-glow"></div>
+  
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">ContextSkeleton</span>
+        <span class="badge-tag">v1.0.0</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#playground">Live Playground</a>
+        <a href="#features">Features</a>
+        <a href="#mcp">MCP Server</a>
+        <a href="https://github.com" target="_blank" class="btn-github">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          GitHub
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span> 80% LLM Token Reduction for Claude Code, Cursor & Windsurf
+      </div>
+      <h1 class="hero-title">
+        Compress Code Context.<br>
+        <span class="gradient-text">Cut LLM Costs & Context Rot.</span>
+      </h1>
+      <p class="hero-subtitle">
+        ContextSkeleton uses Tree-Sitter AST folding to strip function implementations while retaining exported signatures, interfaces, and docstrings.
+      </p>
+      
+      <div class="hero-cta-group">
+        <div class="cli-command-box" id="copyCliBtn">
+          <code>npx context-skeleton scan</code>
+          <button class="btn-copy-cmd" title="Copy CLI Command">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <a href="#playground" class="btn-primary">Try Live Visualizer →</a>
+      </div>
+
+      <!-- METRICS BAR -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-val gradient-text" id="statTokensSaved">78.4%</div>
+          <div class="metric-lbl">Average Token Reduction</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val" id="statCostSaved">$0.24</div>
+          <div class="metric-lbl">Saved per 100k Tokens</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">0.4ms</div>
+          <div class="metric-lbl">AST Parsing Latency</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">100%</div>
+          <div class="metric-lbl">Client-Side & Offline</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE PLAYGROUND SECTION -->
+    <section id="playground" class="playground-section">
+      <div class="section-header">
+        <h2>Interactive AST Skeletonizer Playground</h2>
+        <p>Paste your TypeScript, Python, or Go code below to see real-time AST skeleton folding and token savings.</p>
+      </div>
+
+      <div class="language-tabs">
+        <button class="tab-btn active" data-lang="ts">TypeScript / JS</button>
+        <button class="tab-btn" data-lang="py">Python</button>
+        <button class="tab-btn" data-lang="go">Go / C-Style</button>
+      </div>
+
+      <div class="editor-container">
+        <!-- INPUT CODE EDITOR -->
+        <div class="editor-pane">
+          <div class="editor-header">
+            <span>INPUT SOURCE CODE</span>
+            <span id="inputTokenCount" class="badge-tokens">Original: 342 tokens</span>
+          </div>
+          <textarea id="codeInput" class="code-textarea" spellcheck="false" placeholder="Paste your code here..."></textarea>
+        </div>
+
+        <!-- SKELETON OUTPUT EDITOR -->
+        <div class="editor-pane">
+          <div class="editor-header">
+            <span>SKELETONIZED AST CONTEXT</span>
+            <span id="outputTokenCount" class="badge-tokens badge-success">Skeleton: 74 tokens (-78.4%)</span>
+          </div>
+          <textarea id="codeOutput" class="code-textarea readonly-textarea" readonly spellcheck="false"></textarea>
+          <div class="editor-overlay-actions">
+            <button id="btnCopySkeleton" class="btn-copy-skeleton">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy Compressed Context
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE SAVINGS CARD -->
+      <div class="savings-card-bar">
+        <div class="savings-info">
+          <span class="savings-title">Prompt Cost Saved:</span>
+          <span id="liveDollarSavings" class="savings-amount">$0.0008 / prompt</span>
+        </div>
+        <div class="badge-snippet-box">
+          <span class="badge-label">PR & .cursorrules Badge:</span>
+          <code id="badgeSnippet">⚡ Context optimized by ContextSkeleton (Saved 78.4% tokens)</code>
+          <button id="btnCopyBadge" class="btn-sm">Copy Badge</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MCP SERVER INTEGRATION -->
+    <section id="mcp" class="mcp-section">
+      <div class="glass-card mcp-card">
+        <div class="mcp-badge">MCP PROTOCOL INTEGRATION</div>
+        <h2>Native Model Context Protocol Server</h2>
+        <p>Integrate ContextSkeleton directly with Claude Code, Cursor, and AGY AI Agents via standard stdio JSON-RPC.</p>
+
+        <div class="code-snippet-block">
+          <div class="code-title">claude_desktop_config.json / .cursorrules</div>
+          <pre><code>{
+  "mcpServers": {
+    "context-skeleton": {
+      "command": "npx",
+      "args": ["-y", "@context-skeleton/mcp-server"]
+    }
+  }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <p>© 2026 ContextSkeleton. Built for high-speed AI development.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

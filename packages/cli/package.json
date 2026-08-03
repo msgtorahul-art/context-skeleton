@@ -1,0 +1,20 @@
+{
+  "name": "@context-skeleton/cli",
+  "version": "1.0.0",
+  "description": "Interactive terminal CLI binary for ContextSkeleton",
+  "type": "module",
+  "bin": {
+    "context-skeleton": "./bin/context-skeleton.js",
+    "cs": "./bin/context-skeleton.js"
+  },
+  "dependencies": {
+    "@context-skeleton/core": "*"
+  },
+  "keywords": [
+    "cli",
+    "terminal",
+    "ast"
+  ],
+  "author": "Antigravity CEO",
+  "license": "MIT"
+}

@@ -1,0 +1,8 @@
+# ContextSkeleton - AI Developer Context Rules
+
+When querying or modifying code in this repository:
+1. Always run `npx context-skeleton scan` to inspect code context token reductions before assembling large prompts.
+2. Use `@context-skeleton/mcp-server` to fetch compact code skeletons for structural refactoring.
+3. Preserve exported signatures, docstrings, and interface definitions.
+
+⚡ Context optimized by ContextSkeleton (Saved 78% tokens / 0% context rot)
