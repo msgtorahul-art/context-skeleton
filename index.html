@@ -19,14 +19,18 @@
   
   <style>
     :root {
-      --brand-blue: #0066ff;
-      --brand-blue-hover: #0052cc;
+      --brand-blue: #0284c7;
+      --brand-blue-hover: #0369a1;
       --bg-white: #ffffff;
       --bg-paper: #f8fafc;
+      --bg-dark: #0f172a;
+      --bg-dark-card: #1e293b;
       --border-light: #e2e8f0;
+      --border-dark: #334155;
       --text-dark: #0f172a;
       --text-secondary: #475569;
       --text-muted: #64748b;
+      --text-light: #f8fafc;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -49,11 +53,12 @@
 
     /* TOP ANNOUNCEMENT BAR */
     .announcement-bar {
-      background-color: #0f172a;
+      background-color: var(--bg-dark);
       color: #ffffff;
       padding: 0.6rem 0;
       font-size: 0.88rem;
       font-weight: 500;
+      border-bottom: 1px solid var(--border-dark);
     }
 
     .announcement-flex {
@@ -161,8 +166,8 @@
     /* HERO SECTION */
     .hero-section {
       border-bottom: 1px solid var(--border-light);
-      padding: 5.5rem 0;
-      background: linear-gradient(180deg, #ffffff 0%, var(--bg-paper) 100%);
+      padding: 5rem 0;
+      background: var(--bg-paper);
     }
 
     .hero-grid {
@@ -183,9 +188,9 @@
     }
 
     .hero-title {
-      font-size: 3.8rem;
+      font-size: 3.5rem;
       font-weight: 800;
-      line-height: 1.1;
+      line-height: 1.15;
       letter-spacing: -1.5px;
       color: var(--text-dark);
       margin-bottom: 1.5rem;
@@ -194,7 +199,7 @@
     .highlight-blue { color: var(--brand-blue); }
 
     .hero-subtitle {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--text-secondary);
       margin-bottom: 2.5rem;
       line-height: 1.6;
@@ -228,15 +233,15 @@
 
     /* CODE PREVIEW CARD */
     .hero-code-card {
-      background: #0f172a;
-      border: 1px solid #1e293b;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
     }
 
     .code-card-head {
-      background: #1e293b;
+      background: var(--bg-dark-card);
       padding: 0.75rem 1.2rem;
       display: flex;
       align-items: center;
@@ -244,6 +249,7 @@
       color: #94a3b8;
       font-family: var(--font-mono);
       font-size: 0.8rem;
+      border-bottom: 1px solid var(--border-dark);
     }
 
     .dot-group { display: flex; gap: 6px; }
@@ -265,14 +271,41 @@
     .code-func { color: #818cf8; }
     .code-comment { color: #64748b; font-style: italic; }
 
-    /* FEATURES GRID */
-    .features-section {
-      padding: 6rem 0;
+    /* TRUST & METRICS STRIP */
+    .trust-strip {
       border-bottom: 1px solid var(--border-light);
+      background: #ffffff;
+      padding: 1.5rem 0;
+    }
+
+    .trust-flex {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .trust-icon { color: var(--brand-blue); font-size: 1.1rem; }
+
+    /* TABBED INSTALLATION PANEL */
+    .install-section {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--border-light);
+      background: #ffffff;
     }
 
     .section-title {
-      font-size: 2.4rem;
+      font-size: 2.2rem;
       font-weight: 800;
       letter-spacing: -1px;
       margin-bottom: 0.5rem;
@@ -281,44 +314,137 @@
     .section-desc {
       font-size: 1.1rem;
       color: var(--text-secondary);
-      margin-bottom: 3.5rem;
+      margin-bottom: 2.5rem;
     }
 
-    .features-grid {
+    .install-tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn:hover { color: var(--brand-blue); }
+    .tab-btn.active {
+      color: var(--brand-blue);
+      border-bottom-color: var(--brand-blue);
+    }
+
+    .tab-content {
+      display: none;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 1.5rem;
+      color: #ffffff;
+      position: relative;
+    }
+
+    .tab-content.active { display: block; }
+
+    .tab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .btn-copy {
+      background: var(--border-dark);
+      color: #ffffff;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+
+    .btn-copy:hover { background: var(--brand-blue); }
+
+    pre.tab-code {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #38bdf8;
+      overflow-x: auto;
+    }
+
+    /* HOW IT WORKS SECTION */
+    .how-section {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-paper);
+    }
+
+    .steps-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
     }
 
-    .feature-card {
+    .step-card {
       border: 1px solid var(--border-light);
-      padding: 2.2rem;
-      border-radius: 8px;
       background: #ffffff;
+      padding: 2rem;
+      border-radius: 8px;
     }
 
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .feature-h3 {
-      font-size: 1.25rem;
+    .step-num {
+      font-size: 0.85rem;
       font-weight: 700;
-      margin-bottom: 0.6rem;
+      color: var(--brand-blue);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
     }
 
-    .feature-p {
+    .step-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .step-p {
       color: var(--text-secondary);
       font-size: 0.95rem;
       line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    .step-metric {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--brand-blue);
+      background: var(--bg-paper);
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      display: inline-block;
+      border: 1px solid var(--border-light);
     }
 
     /* INTERACTIVE PLAYGROUND */
     .playground-section {
-      padding: 6rem 0;
+      padding: 5rem 0;
       border-bottom: 1px solid var(--border-light);
-      background: var(--bg-paper);
+      background: #ffffff;
     }
 
     .editor-grid {
@@ -335,7 +461,7 @@
     }
 
     .editor-head {
-      background: #ffffff;
+      background: var(--bg-paper);
       border-bottom: 1px solid var(--border-light);
       padding: 0.8rem 1.2rem;
       display: flex;
@@ -363,20 +489,66 @@
 
     textarea.readonly-area {
       color: var(--brand-blue);
-      background: #f8fafc;
+      background: var(--bg-paper);
     }
+
+    /* SUPPORT / SPONSORS SECTION */
+    .sponsors-section {
+      padding: 4.5rem 0;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-paper);
+    }
+
+    .sponsors-card {
+      border: 1px solid var(--border-light);
+      background: #ffffff;
+      padding: 2.5rem;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .sponsors-h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .sponsors-p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 600px;
+    }
+
+    .btn-sponsor {
+      background-color: #ea4c89;
+      color: #ffffff;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .btn-sponsor:hover { background-color: #d6336c; }
 
     /* MONETIZATION & ENTERPRISE CONTACT */
     .enterprise-section {
-      padding: 6rem 0;
+      padding: 5rem 0;
       border-bottom: 1px solid var(--border-light);
     }
 
     .enterprise-card {
-      border: 1px solid var(--border-light);
+      border: 1px solid var(--border-dark);
       border-radius: 12px;
       padding: 3.5rem 3rem;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      background: var(--bg-dark);
       color: #ffffff;
       display: grid;
       grid-template-columns: 1.2fr 0.8fr;
@@ -436,17 +608,18 @@
       cursor: pointer;
     }
 
+    /* FOOTER */
     footer {
-      padding: 4rem 0 3rem;
+      padding: 4.5rem 0 3rem;
       background: #ffffff;
       border-top: 1px solid var(--border-light);
     }
 
     .footer-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 3.5rem;
     }
 
     .footer-brand {
@@ -459,11 +632,12 @@
     .footer-desc {
       color: var(--text-secondary);
       font-size: 0.9rem;
-      max-width: 320px;
+      line-height: 1.6;
+      max-width: 300px;
     }
 
     .footer-h4 {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -483,6 +657,7 @@
       color: var(--text-secondary);
       text-decoration: none;
       font-size: 0.9rem;
+      transition: color 0.15s ease;
     }
 
     .footer-links a:hover { color: var(--brand-blue); }
@@ -517,18 +692,19 @@
       </a>
 
       <ul class="nav-menu">
-        <li><a href="#features">Features</a></li>
+        <li><a href="#install">Install</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#playground">Playground</a></li>
+        <li><a href="#sponsors">Support</a></li>
         <li><a href="#enterprise">Enterprise</a></li>
-        <li><a href="https://functionapp.in" target="_blank">FunctionApp.in</a></li>
       </ul>
 
       <div class="nav-actions">
         <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-github">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-          GitHub ★
+          <span id="githubStarsCount">GitHub ★</span>
         </a>
-        <a href="#enterprise" class="btn-blue">Get Early Access</a>
+        <a href="#install" class="btn-blue">Get Started</a>
       </div>
     </div>
   </header>
@@ -537,12 +713,12 @@
   <section class="hero-section">
     <div class="container hero-grid">
       <div class="hero-left">
-        <span class="hero-tag">OPEN SOURCE STRUCTURAL CODE PRUNER</span>
-        <h1 class="hero-title">Optimize LLM <span class="highlight-blue">context windows</span></h1>
-        <p class="hero-subtitle">Fold internal implementations while preserving signatures, interface definitions, and docstrings for AI agents.</p>
+        <span class="hero-tag">OPEN SOURCE STRUCTURAL CODE SKELETONIZER</span>
+        <h1 class="hero-title">Optimize LLM <span class="highlight-blue">code context</span> window costs</h1>
+        <p class="hero-subtitle">Fold internal function bodies while preserving top-level signatures, interface definitions, and docstrings for Claude Code, Cursor, Windsurf, and AGY agents.</p>
         
         <div class="btn-group">
-          <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-primary-hero">Install via CLI</a>
+          <a href="#install" class="btn-primary-hero">Install via CLI & MCP</a>
           <a href="#playground" class="btn-secondary-hero">Test Playground</a>
         </div>
       </div>
@@ -554,7 +730,7 @@
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
           </div>
-          <span>context-skeleton scan (78.4% Saved)</span>
+          <span>context-skeleton scan (Illustrative Demo)</span>
         </div>
         <pre class="code-block"><code><span class="code-comment">// Output Context Skeletonized Structural Code</span>
 <span class="code-keyword">export interface</span> UserProfile {
@@ -575,29 +751,125 @@
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section id="features" class="features-section">
+  <!-- TRUST & METRICS STRIP -->
+  <div class="trust-strip">
+    <div class="container trust-flex">
+      <div class="trust-item"><span class="trust-icon">🔒</span> 100% Local Air-Gapped (Zero Telemetry)</div>
+      <div class="trust-item"><span class="trust-icon">📄</span> Open Source MIT License</div>
+      <div class="trust-item"><span class="trust-icon">✔</span> 12/12 Unit & Regression Tests Passing</div>
+      <div class="trust-item"><span class="trust-icon">⚡</span> 67% Blended Token Savings Across Repos</div>
+    </div>
+  </div>
+
+  <!-- TABBED INSTALLATION PANEL -->
+  <section id="install" class="install-section">
     <div class="container">
-      <h2 class="section-title">Engineered for AI Developer Tools</h2>
-      <p class="section-desc">100% local, air-gapped execution with zero telemetry.</p>
+      <h2 class="section-title">Quick Installation & Configuration</h2>
+      <p class="section-desc">Select your developer tool or environment below to view exact setup instructions.</p>
 
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3 class="feature-h3">Sub-Millisecond Speed</h3>
-          <p class="feature-p">Lightweight structural code folding engine processes large multi-file codebases in under 0.4ms with zero network overhead.</p>
+      <div class="install-tabs">
+        <button class="tab-btn active" data-tab="claude" onclick="switchTab('claude')">Claude Code</button>
+        <button class="tab-btn" data-tab="cursor" onclick="switchTab('cursor')">Cursor</button>
+        <button class="tab-btn" data-tab="windsurf" onclick="switchTab('windsurf')">Windsurf</button>
+        <button class="tab-btn" data-tab="cli" onclick="switchTab('cli')">Terminal CLI</button>
+        <button class="tab-btn" data-tab="mcp" onclick="switchTab('mcp')">MCP Server</button>
+      </div>
+
+      <!-- Claude Code -->
+      <div id="tab-claude" class="tab-content active">
+        <div class="tab-header">
+          <span>Add to your <code>claude_desktop_config.json</code></span>
+          <button class="btn-copy" onclick="copySnippet('snippet-claude', this)">Copy JSON</button>
+        </div>
+        <pre class="tab-code"><code id="snippet-claude">{
+  "mcpServers": {
+    "context-skeleton": {
+      "command": "npx",
+      "args": ["-y", "context-skeleton-mcp"]
+    }
+  }
+}</code></pre>
+      </div>
+
+      <!-- Cursor -->
+      <div id="tab-cursor" class="tab-content">
+        <div class="tab-header">
+          <span>Add to Cursor MCP Settings or <code>.cursorrules</code></span>
+          <button class="btn-copy" onclick="copySnippet('snippet-cursor', this)">Copy Config</button>
+        </div>
+        <pre class="tab-code"><code id="snippet-cursor"># Cursor MCP Server Configuration
+Name: context-skeleton
+Type: command
+Command: npx -y context-skeleton-mcp</code></pre>
+      </div>
+
+      <!-- Windsurf -->
+      <div id="tab-windsurf" class="tab-content">
+        <div class="tab-header">
+          <span>Add to Windsurf Cascade MCP Settings</span>
+          <button class="btn-copy" onclick="copySnippet('snippet-windsurf', this)">Copy Config</button>
+        </div>
+        <pre class="tab-code"><code id="snippet-windsurf">{
+  "mcpServers": {
+    "context-skeleton": {
+      "command": "npx",
+      "args": ["-y", "context-skeleton-mcp"]
+    }
+  }
+}</code></pre>
+      </div>
+
+      <!-- CLI -->
+      <div id="tab-cli" class="tab-content">
+        <div class="tab-header">
+          <span>Run via Terminal CLI</span>
+          <button class="btn-copy" onclick="copySnippet('snippet-cli', this)">Copy Command</button>
+        </div>
+        <pre class="tab-code"><code id="snippet-cli"># Scan repository and calculate token savings metrics:
+npx context-skeleton scan
+
+# Copy formatted skeleton markdown directly to stdout for AI prompts:
+npx context-skeleton copy > context.md</code></pre>
+      </div>
+
+      <!-- MCP Server -->
+      <div id="tab-mcp" class="tab-content">
+        <div class="tab-header">
+          <span>Standalone MCP Stdio Server Executable</span>
+          <button class="btn-copy" onclick="copySnippet('snippet-mcp', this)">Copy Command</button>
+        </div>
+        <pre class="tab-code"><code id="snippet-mcp"># Run standalone zero-dependency MCP server over stdio JSON-RPC 2.0:
+npx -y context-skeleton-mcp</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS SECTION -->
+  <section id="how-it-works" class="how-section">
+    <div class="container">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-desc">Engineered for zero latency, precision signature retention, and high compression.</p>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">Step 01</div>
+          <h3 class="step-title">Parse</h3>
+          <p class="step-p">Fast zero-dependency scanner parses source code across JS/TS, Python, Go, and Rust to identify exported signatures, structs, types, and docstrings.</p>
+          <div class="step-metric">⚡ Parsing Speed: ~0.4ms</div>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">🛡️</div>
-          <h3 class="feature-h3">100% Air-Gapped & Secure</h3>
-          <p class="feature-p">Runs completely offline on your workstation. Code never leaves your machine and zero data telemetry is sent.</p>
+        <div class="step-card">
+          <div class="step-num">Step 02</div>
+          <h3 class="step-title">Fold</h3>
+          <p class="step-p">Selectively folds internal implementation bodies into comment markers while preserving 100% syntactically intact signatures and docstrings.</p>
+          <div class="step-metric">📊 Blended Savings: ~67%</div>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">🔌</div>
-          <h3 class="feature-h3">MCP Server Native</h3>
-          <p class="feature-p">Integrates seamlessly via Model Context Protocol (MCP) with Claude Code, Cursor, Windsurf, and custom AI agents.</p>
+        <div class="step-card">
+          <div class="step-num">Step 03</div>
+          <h3 class="step-title">Serve</h3>
+          <p class="step-p">Outputs compressed context directly to CLI stdout or streams over MCP stdio to Claude Code, Cursor, Windsurf, or AGY agents.</p>
+          <div class="step-metric">🔌 Stdio Latency: Sub-1ms</div>
         </div>
       </div>
     </div>
@@ -629,7 +901,22 @@
     </div>
   </section>
 
-  <!-- MONETIZATION / ENTERPRISE CONTACT -->
+  <!-- SUPPORT THIS PROJECT (SPONSORS) -->
+  <section id="sponsors" class="sponsors-section">
+    <div class="container">
+      <div class="sponsors-card">
+        <div>
+          <h3 class="sponsors-h3">Support Open Source Development</h3>
+          <p class="sponsors-p">ContextSkeleton is 100% open source and free for individual developers. If ContextSkeleton saves your team tokens and API costs, consider supporting ongoing development via GitHub Sponsors.</p>
+        </div>
+        <a href="https://github.com/sponsors/msgtorahul-art" target="_blank" class="btn-sponsor">
+          ♥ Sponsor on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENTERPRISE CONTACT -->
   <section id="enterprise" class="enterprise-section">
     <div class="container">
       <div class="enterprise-card">
@@ -660,6 +947,7 @@
     </div>
   </section>
 
+  <!-- EXPANDED FOOTER -->
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -669,20 +957,32 @@
         </div>
 
         <div>
-          <h4 class="footer-h4">Product & Code</h4>
+          <h4 class="footer-h4">Product</h4>
           <ul class="footer-links">
-            <li><a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank">GitHub Repository</a></li>
+            <li><a href="#install">Terminal CLI (`context-skeleton`)</a></li>
+            <li><a href="#install">MCP Server (`context-skeleton-mcp`)</a></li>
             <li><a href="#playground">Live Playground</a></li>
-            <li><a href="https://functionapp.in" target="_blank">FunctionApp Platform</a></li>
+            <li><a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank">GitHub Repository</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="footer-h4">Legal & Security</h4>
+          <h4 class="footer-h4">Docs & Architecture</h4>
+          <ul class="footer-links">
+            <li><a href="#install">Quick Start</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="https://github.com/msgtorahul-art/context-skeleton#readme" target="_blank">Benchmark Metrics</a></li>
+            <li><a href="#enterprise">Enterprise Custom Solutions</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-h4">Legal & Company</h4>
           <ul class="footer-links">
             <li><a href="./privacy.html">Privacy Policy</a></li>
             <li><a href="./terms.html">Terms of Service</a></li>
             <li><a href="./security.html">Security & Compliance</a></li>
+            <li><a href="https://functionapp.in" target="_blank">FunctionApp.in</a></li>
           </ul>
         </div>
       </div>
@@ -707,31 +1007,43 @@
       const result = [];
       let inFunction = false;
       let blockDepth = 0;
-      let foldedLines = 0;
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const trimmed = line.trim();
-        const openBraces = (line.match(/\{/g) || []).length;
-        const closeBraces = (line.match(/\}/g) || []).length;
+
+        if (trimmed.startsWith('//') || trimmed.startsWith('/*') || trimmed.startsWith('*')) {
+          result.push(line);
+          continue;
+        }
+
+        let openBraces = (line.match(/\{/g) || []).length;
+        let closeBraces = (line.match(/\}/g) || []).length;
 
         if (inFunction) {
           blockDepth += (openBraces - closeBraces);
           if (blockDepth <= 0) {
             inFunction = false;
-            if (foldedLines > 0) result.push(`  /* ... [folded implementation: ${foldedLines} lines] ... */`);
+            result.push('  /* ... [folded implementation] ... */');
             result.push('}');
-          } else {
-            foldedLines++;
           }
           continue;
         }
 
-        const isSig = /^(export\s+)?(async\s+)?(function|class|interface|type|enum|const\s+\w+\s*=)/.test(trimmed);
+        const isSig = /^(export\s+)?(default\s+)?(public|private|protected|static|async|get|set)*\s*(async\s+)?(function|class|interface|type|enum|const\s+\w+\s*=|constructor|\w+).*?\([^)]*\)[^{]*\{/.test(trimmed) ||
+                      /^(export\s+)?(async\s+)?(function|class|interface|type|enum|const\s+\w+\s*=)/.test(trimmed);
+
         if (isSig && line.includes('{')) {
+          const net = openBraces - closeBraces;
+          if (net <= 0) {
+            const firstBrace = line.indexOf('{');
+            const sigPart = line.substring(0, firstBrace + 1);
+            result.push(`${sigPart} /* ... [folded implementation] ... */ }`);
+            continue;
+          }
+
           inFunction = true;
-          blockDepth = Math.max(1, openBraces - closeBraces);
-          foldedLines = 0;
+          blockDepth = net;
           const braceIdx = line.lastIndexOf('{');
           result.push(braceIdx !== -1 ? line.substring(0, braceIdx + 1) : line);
           continue;
@@ -771,6 +1083,27 @@ export function UserDashboard({ userId }: { userId: string }) {
   return <div className="dashboard">Welcome, {user?.name}</div>;
 }`;
 
+    window.switchTab = function(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+      const activeContent = document.getElementById(`tab-${tabId}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activeContent) activeContent.classList.add('active');
+    };
+
+    window.copySnippet = function(elementId, btnElement) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.textContent || el.value;
+      navigator.clipboard.writeText(text).then(() => {
+        const origText = btnElement.textContent;
+        btnElement.textContent = 'Copied!';
+        setTimeout(() => { btnElement.textContent = origText; }, 2000);
+      });
+    };
+
     window.handleEnterpriseSubmit = function(e) {
       if (e) e.preventDefault();
       const email = document.getElementById('workEmail')?.value || '';
@@ -780,6 +1113,22 @@ export function UserDashboard({ userId }: { userId: string }) {
       window.location.href = `mailto:contact@functionapp.in?subject=${subject}&body=${body}`;
       return false;
     };
+
+    async function fetchGithubStars() {
+      const starsEl = document.getElementById('githubStarsCount');
+      if (!starsEl) return;
+      try {
+        const res = await fetch('https://api.github.com/repos/msgtorahul-art/context-skeleton');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.stargazers_count !== undefined) {
+            starsEl.textContent = `GitHub ★ ${data.stargazers_count}`;
+          }
+        }
+      } catch {
+        // Fallback text
+      }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       const input = document.getElementById('codeInput');
@@ -799,6 +1148,8 @@ export function UserDashboard({ userId }: { userId: string }) {
         update();
         input.addEventListener('input', update);
       }
+
+      fetchGithubStars();
     });
   </script>
 </body>
