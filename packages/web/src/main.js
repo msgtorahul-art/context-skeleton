@@ -126,6 +126,13 @@ const btnCopySkeleton = document.getElementById('btnCopySkeleton');
 const btnCopyBadge = document.getElementById('btnCopyBadge');
 const copyCliBtn = document.getElementById('copyCliBtn');
 
+// MODAL ELEMENTS
+const checkoutModal = document.getElementById('checkoutModal');
+const closeModal = document.getElementById('closeModal');
+const modalPlanTitle = document.getElementById('modalPlanTitle');
+const modalPlanPrice = document.getElementById('modalPlanPrice');
+const checkoutBtns = document.querySelectorAll('.btn-checkout');
+
 let currentLang = 'ts';
 
 function updateSkeleton() {
@@ -147,7 +154,7 @@ function updateSkeleton() {
   badgeSnippet.textContent = `⚡ Context optimized by ContextSkeleton (Saved ${savedPct}% tokens)`;
 }
 
-// INITIALIZE
+// INITIALIZE PLAYGROUND
 codeInput.value = SAMPLES.ts;
 updateSkeleton();
 
@@ -185,4 +192,29 @@ copyCliBtn?.addEventListener('click', () => {
   navigator.clipboard.writeText('npx context-skeleton scan');
   copyCliBtn.style.borderColor = '#00e676';
   setTimeout(() => { copyCliBtn.style.borderColor = ''; }, 2000);
+});
+
+// CHECKOUT MODAL HANDLERS
+checkoutBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const plan = btn.dataset.plan;
+    if (plan === 'pro') {
+      modalPlanTitle.textContent = 'Subscribe to Pro Developer';
+      modalPlanPrice.textContent = '$12.00 / month';
+    } else if (plan === 'team') {
+      modalPlanTitle.textContent = 'Subscribe to Team Plan';
+      modalPlanPrice.textContent = '$49.00 / seat / month';
+    }
+    checkoutModal.classList.remove('hidden');
+  });
+});
+
+closeModal?.addEventListener('click', () => {
+  checkoutModal.classList.add('hidden');
+});
+
+checkoutModal?.addEventListener('click', (e) => {
+  if (e.target === checkoutModal) {
+    checkoutModal.classList.add('hidden');
+  }
 });
