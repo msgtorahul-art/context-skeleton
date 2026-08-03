@@ -2,7 +2,7 @@
 
 > **Zero-latency AST Code Folding CLI, Model Context Protocol (MCP) Server & Token Optimizer for AI Agents (Cursor, Claude Code, Windsurf, AGY).**
 
-[![ContextSkeleton](https://img.shields.io/badge/%E2%9A%A1_ContextSkeleton-78%25_Tokens_Saved-00f2fe?style=flat-square)](#)
+[![ContextSkeleton](https://img.shields.io/badge/%E2%9A%A1_ContextSkeleton-78%25_Tokens_Saved-00f2fe?style=flat-square)](https://github.com/msgtorahul-art/context-skeleton)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ContextSkeleton parses your codebase into an Abstract Syntax Tree (AST) and folds function and class implementations while preserving top-level signatures, interface definitions, exported types, and docstrings.
