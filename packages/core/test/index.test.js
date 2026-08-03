@@ -224,10 +224,52 @@ export function handleRequest(req, res) {
   assert.ok(result.skeletonCode.includes('folded implementation'), 'Function body MUST be folded');
 });
 
+test('Regression - Single-line Function Definitions Must NOT Swallow Subsequent Code', () => {
+  const code = `
+export function real(x) { return x*2; }
+export function another(y) {
+  return y + 1;
+}
+export const AFTER = 42;
+`;
+
+  const result = skeletonize(code, 'singleLine.js');
+  assert.ok(result.skeletonCode.includes('export function real(x) {'), 'Single-line function signature preserved');
+  assert.ok(result.skeletonCode.includes('export function another(y) {'), 'Subsequent function signature MUST survive');
+  assert.ok(result.skeletonCode.includes('export const AFTER = 42;'), 'Subsequent export constant MUST survive');
+});
+
+test('Regression - Single-line Function as Very Last Line of File', () => {
+  const code = `
+export const BEFORE = 100;
+export function lastLineFunc(a, b) { return a + b; }
+`;
+
+  const result = skeletonize(code, 'lastLine.js');
+  assert.ok(result.skeletonCode.includes('export const BEFORE = 100;'), 'Prior constant preserved');
+  assert.ok(result.skeletonCode.includes('export function lastLineFunc(a, b) {'), 'Last line single-line function signature preserved');
+});
+
+test('Regression - Multiple Single-line Functions in a Row', () => {
+  const code = `
+export function inlineOne() { return 1; }
+export function inlineTwo() { return 2; }
+export function inlineThree() { return 3; }
+export const FINAL_VAL = 99;
+`;
+
+  const result = skeletonize(code, 'multiInline.js');
+  assert.ok(result.skeletonCode.includes('export function inlineOne() {'), 'inlineOne preserved');
+  assert.ok(result.skeletonCode.includes('export function inlineTwo() {'), 'inlineTwo preserved');
+  assert.ok(result.skeletonCode.includes('export function inlineThree() {'), 'inlineThree preserved');
+  assert.ok(result.skeletonCode.includes('export const FINAL_VAL = 99;'), 'FINAL_VAL preserved');
+});
+
 test('Token Estimation & Financial Savings', () => {
   const savings = calculateSavings(100000, 20000, 3.00);
   assert.equal(savings.tokensSaved, 80000);
   assert.equal(savings.percentageSaved, 80);
   assert.equal(savings.dollarsSaved, 0.24);
 });
+
 

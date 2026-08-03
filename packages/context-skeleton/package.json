@@ -1,0 +1,26 @@
+{
+  "name": "context-skeleton",
+  "version": "1.0.0",
+  "description": "Zero-dependency structural code folding CLI, MCP Server & LLM token optimizer",
+  "type": "module",
+  "main": "./src/core.js",
+  "bin": {
+    "context-skeleton": "./bin/context-skeleton.js",
+    "cs": "./bin/context-skeleton.js"
+  },
+  "scripts": {
+    "build": "cp ../core/src/index.js ./src/core.js",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "structural-code-folding",
+    "mcp",
+    "token-optimizer",
+    "cursor",
+    "claude-code",
+    "windsurf",
+    "cli"
+  ],
+  "author": "FunctionApp (functionapp.in)",
+  "license": "MIT"
+}
