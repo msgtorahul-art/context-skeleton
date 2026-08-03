@@ -1,5 +1,6 @@
 /**
  * ContextSkeleton Model Context Protocol (MCP) Server Handler
+ * Protocol: JSON-RPC 2.0 over Stdio for Claude Desktop & Claude Code
  */
 
 import { skeletonizeDirectory, indexSymbols, skeletonize } from '@context-skeleton/core';
@@ -62,7 +63,7 @@ export class MCPServerHandler {
     };
   }
 
-  handleCallTool(name, args) {
+  handleCallTool(name, args = {}) {
     const targetDir = args.directoryPath ? path.resolve(this.workspaceDir, args.directoryPath) : this.workspaceDir;
 
     switch (name) {
@@ -100,7 +101,6 @@ export class MCPServerHandler {
           return { content: [{ type: 'text', text: `Symbol '${args.symbolName}' not found in ${args.filePath}. Available symbols: ${symbols.map(s => s.name).join(', ')}` }] };
         }
 
-        // Extract context block around symbol
         const startLine = Math.max(0, match.line - 1);
         const endLine = Math.min(lines.length, match.line + 40);
         const snippet = lines.slice(startLine, endLine).join('\n');
@@ -132,3 +132,78 @@ export class MCPServerHandler {
     }
   }
 }
+
+// STDIO JSON-RPC 2.0 SERVER PROCESS (KEEPS PROCESS ALIVE FOR CLAUDE DESKTOP)
+const handler = new MCPServerHandler();
+let buffer = '';
+
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', (chunk) => {
+  buffer += chunk;
+  const lines = buffer.split('\n');
+  buffer = lines.pop();
+
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    try {
+      const json = JSON.parse(line);
+      processRequest(json);
+    } catch (e) {
+      // Ignore invalid JSON lines
+    }
+  }
+});
+
+function sendResponse(response) {
+  process.stdout.write(JSON.stringify(response) + '\n');
+}
+
+function processRequest(req) {
+  if (!req || typeof req !== 'object') return;
+  const { id, method, params } = req;
+
+  if (method === 'initialize') {
+    sendResponse({
+      jsonrpc: '2.0',
+      id,
+      result: {
+        protocolVersion: '2024-11-05',
+        capabilities: {
+          tools: {}
+        },
+        serverInfo: {
+          name: 'context-skeleton',
+          version: '1.0.0'
+        }
+      }
+    });
+  } else if (method === 'notifications/initialized') {
+    // Notification acknowledgement
+  } else if (method === 'tools/list') {
+    sendResponse({
+      jsonrpc: '2.0',
+      id,
+      result: handler.handleListTools()
+    });
+  } else if (method === 'tools/call') {
+    const { name, arguments: args } = params || {};
+    const res = handler.handleCallTool(name, args);
+    sendResponse({
+      jsonrpc: '2.0',
+      id,
+      result: res
+    });
+  } else if (id !== undefined) {
+    sendResponse({
+      jsonrpc: '2.0',
+      id,
+      error: {
+        code: -32601,
+        message: `Method not found: ${method}`
+      }
+    });
+  }
+}
+
+// Prevent process from exiting
+process.stdin.resume();
