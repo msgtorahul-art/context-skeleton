@@ -125,6 +125,22 @@ const tabButtons = document.querySelectorAll('.tab-btn');
 const btnCopySkeleton = document.getElementById('btnCopySkeleton');
 const btnCopyBadge = document.getElementById('btnCopyBadge');
 const copyCliBtn = document.getElementById('copyCliBtn');
+const cliCommandText = document.getElementById('cliCommandText');
+const pkgTabs = document.querySelectorAll('.pkg-tab');
+
+// ROI CALCULATOR ELEMENTS
+const spendSlider = document.getElementById('spendSlider');
+const spendVal = document.getElementById('spendVal');
+const roiOriginal = document.getElementById('roiOriginal');
+const roiNew = document.getElementById('roiNew');
+const roiAnnual = document.getElementById('roiAnnual');
+
+// MODAL ELEMENTS
+const checkoutModal = document.getElementById('checkoutModal');
+const closeModal = document.getElementById('closeModal');
+const modalPlanTitle = document.getElementById('modalPlanTitle');
+const modalPlanPrice = document.getElementById('modalPlanPrice');
+const checkoutBtns = document.querySelectorAll('.btn-checkout');
 
 let currentLang = 'ts';
 
@@ -147,12 +163,29 @@ function updateSkeleton() {
   badgeSnippet.textContent = `⚡ Context optimized by ContextSkeleton (Saved ${savedPct}% tokens)`;
 }
 
-// INITIALIZE
-codeInput.value = SAMPLES.ts;
-updateSkeleton();
+function updateRoiCalculator() {
+  if (!spendSlider) return;
+  const monthlySpend = parseInt(spendSlider.value, 10);
+  const newMonthlySpend = Math.round(monthlySpend * 0.22);
+  const monthlySavings = monthlySpend - newMonthlySpend;
+  const annualSavings = monthlySavings * 12;
+
+  spendVal.textContent = `$${monthlySpend.toLocaleString()} / month`;
+  roiOriginal.textContent = `$${monthlySpend.toLocaleString()}`;
+  roiNew.textContent = `$${newMonthlySpend.toLocaleString()}`;
+  roiAnnual.textContent = `$${annualSavings.toLocaleString()} / year`;
+}
+
+// INITIALIZE PLAYGROUND & ROI
+if (codeInput) {
+  codeInput.value = SAMPLES.ts;
+  updateSkeleton();
+}
+updateRoiCalculator();
 
 // EVENT LISTENERS
-codeInput.addEventListener('input', updateSkeleton);
+codeInput?.addEventListener('input', updateSkeleton);
+spendSlider?.addEventListener('input', updateRoiCalculator);
 
 tabButtons.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -164,13 +197,26 @@ tabButtons.forEach(btn => {
   });
 });
 
+// PACKAGE MANAGER TABS
+pkgTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    pkgTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const pkg = tab.dataset.pkg;
+    if (pkg === 'npx') cliCommandText.textContent = 'npx context-skeleton scan';
+    else if (pkg === 'bunx') cliCommandText.textContent = 'bunx context-skeleton scan';
+    else if (pkg === 'pnpm') cliCommandText.textContent = 'pnpm dlx context-skeleton scan';
+    else if (pkg === 'yarn') cliCommandText.textContent = 'yarn dlx context-skeleton scan';
+  });
+});
+
 btnCopySkeleton?.addEventListener('click', () => {
   navigator.clipboard.writeText(codeOutput.value);
   btnCopySkeleton.innerHTML = `✓ Copied!`;
   setTimeout(() => {
     btnCopySkeleton.innerHTML = `
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      Copy Compressed Context
+      Copy Skeletonized Context
     `;
   }, 2000);
 });
@@ -182,7 +228,32 @@ btnCopyBadge?.addEventListener('click', () => {
 });
 
 copyCliBtn?.addEventListener('click', () => {
-  navigator.clipboard.writeText('npx context-skeleton scan');
+  navigator.clipboard.writeText(cliCommandText.textContent);
   copyCliBtn.style.borderColor = '#00e676';
   setTimeout(() => { copyCliBtn.style.borderColor = ''; }, 2000);
+});
+
+// CHECKOUT MODAL HANDLERS
+checkoutBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const plan = btn.dataset.plan;
+    if (plan === 'pro') {
+      modalPlanTitle.textContent = 'Subscribe to Pro Developer';
+      modalPlanPrice.textContent = '$12.00 / month';
+    } else if (plan === 'team') {
+      modalPlanTitle.textContent = 'Subscribe to Team Plan';
+      modalPlanPrice.textContent = '$49.00 / seat / month';
+    }
+    checkoutModal.classList.remove('hidden');
+  });
+});
+
+closeModal?.addEventListener('click', () => {
+  checkoutModal.classList.add('hidden');
+});
+
+checkoutModal?.addEventListener('click', (e) => {
+  if (e.target === checkoutModal) {
+    checkoutModal.classList.add('hidden');
+  }
 });
