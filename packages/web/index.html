@@ -3,34 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ContextSkeleton — The #1 AST Code Skeletonizer & LLM Cost Optimizer</title>
-  <meta name="description" content="Zero-latency AST code folding CLI, MCP Server, and Web Visualizer that compresses codebases into syntactically valid skeletons for Cursor, Claude Code, Windsurf, and AI Agents. Save 80% on LLM token costs.">
+  <title>ContextSkeleton — The AST Code Skeletonizer for AI Agents</title>
+  <meta name="description" content="Give AI agents lightweight, syntactically valid code skeletons. Cut LLM token costs by 80% with zero latency for Claude Code, Cursor, Windsurf, and AGY.">
   
   <!-- OpenGraph / Social Media SEO -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://contextskeleton.com/">
-  <meta property="og:title" content="ContextSkeleton — Cut LLM Context Costs by 80%">
-  <meta property="og:description" content="Enterprise AST code folding CLI & MCP server for Cursor, Claude Code, and Windsurf.">
+  <meta property="og:title" content="ContextSkeleton — Give AI Agents Knowledge">
+  <meta property="og:description" content="Fast retrieval. 80% lower token costs. Zero context rot. Start in seconds.">
   <meta property="og:image" content="https://img.shields.io/badge/%E2%9A%A1_ContextSkeleton-78%25_Tokens_Saved-00f2fe?style=for-the-badge">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./src/style.css">
 </head>
 <body>
-  <!-- BACKGROUND SPOTLIGHT MESH & GRID OVERLAY -->
-  <div class="bg-grid-overlay"></div>
-  <div class="spotlight-cyan"></div>
-  <div class="spotlight-purple"></div>
-
-  <!-- PARENT COMPANY ANNOUNCEMENT BAR -->
+  <!-- PINECONE-STYLE TOP ANNOUNCEMENT BAR -->
   <div class="top-announcement-bar">
-    <span>🚀 Built by <strong>Antigravity Labs</strong> — Next-Generation Enterprise AI Infrastructure</span>
+    <div class="container flex-between">
+      <span>🚀 <strong>ContextSkeleton v1.0.0 is Live</strong> — Cut AI Agent Token Costs by 80%</span>
+      <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="announcement-link">Read Announcement →</a>
+    </div>
   </div>
 
-  <!-- GLASSMORPHIC NAVIGATION -->
+  <!-- NAVIGATION HEADER -->
   <header class="navbar">
     <div class="nav-container">
       <a href="#" class="logo">
@@ -38,331 +36,189 @@
         <span class="logo-text">ContextSkeleton</span>
         <span class="badge-tag">v1.0.0</span>
       </a>
+
       <nav class="nav-links">
-        <a href="#playground">Playground</a>
-        <a href="#calculator">ROI Calculator</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#comparison">Comparison</a>
+        <a href="#integration">Integrations</a>
+        <a href="#console">Console Peek</a>
         <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
+        <a href="#docs">Docs</a>
       </nav>
+
       <div class="nav-actions">
         <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-github">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-          <span class="star-count">★ Star</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          GitHub ★
         </a>
-        <a href="#pricing" class="btn-primary-sm">Get Started</a>
+        <a href="https://app.contextskeleton.com" class="btn-pinecone-primary">Start Building</a>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- HERO SECTION -->
-    <section class="hero">
-      <div class="hero-badge">
-        <span class="pulse-dot"></span> 80% LLM Token Reduction for Claude Code, Cursor & Windsurf
-      </div>
-
-      <h1 class="hero-title">
-        High-Performance Code Context.<br>
-        <span class="gradient-text">Zero LLM Token Waste.</span>
-      </h1>
-
-      <p class="hero-subtitle">
-        ContextSkeleton uses Tree-Sitter AST folding to compress large codebases into syntactically valid skeletons. Eliminate context rot, cut prompt fees by 80%, and speed up AI agents by 6x.
-      </p>
-
-      <!-- MULTI-PACKAGE CLI INSTALL BAR -->
-      <div class="hero-cli-installer">
-        <div class="package-tabs">
-          <button class="pkg-tab active" data-pkg="npx">npx</button>
-          <button class="pkg-tab" data-pkg="bunx">bunx</button>
-          <button class="pkg-tab" data-pkg="pnpm">pnpm dlx</button>
-          <button class="pkg-tab" data-pkg="yarn">yarn dlx</button>
+    <!-- HERO SECTION (PINECONE DESIGN SYSTEM) -->
+    <section class="hero-section">
+      <div class="container border-grid">
+        <div class="hero-content">
+          <span class="section-tag">BUILD KNOWLEDGEABLE AI AGENTS</span>
+          <h1 class="hero-headline">Give agents <span class="brand-blue">knowledge</span>, not tokens.</h1>
+          <p class="hero-subtext">Fast AST retrieval. Accurate results. 80% lower token costs. Start in seconds.</p>
+          
+          <div class="hero-btn-group">
+            <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-crosshair-primary">
+              <span>Start Building</span>
+              <div class="corner-crosshairs"></div>
+            </a>
+            <a href="#playground" class="btn-crosshair-secondary">
+              <span>Interactive Playground</span>
+              <div class="corner-crosshairs"></div>
+            </a>
+          </div>
         </div>
-        <div class="cli-command-box" id="copyCliBtn">
-          <span class="terminal-prompt">$</span>
-          <code id="cliCommandText">npx context-skeleton scan</code>
-          <button class="btn-copy-cmd" title="Copy CLI Command">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      </div>
+    </section>
+
+    <!-- PINECONE-STYLE AI TOOLCHAIN INTEGRATION BAR -->
+    <section id="integration" class="integration-section">
+      <div class="container border-grid">
+        <div class="integration-header">
+          <span class="section-tag-sm">GET STARTED</span>
+          <div class="toolchain-tabs">
+            <button class="tool-tab active" data-tool="claude">{Claude Code}</button>
+            <button class="tool-tab" data-tool="cursor">{Cursor AI}</button>
+            <button class="tool-tab" data-tool="windsurf">{Windsurf}</button>
+            <button class="tool-tab" data-tool="vscode">{VS Code}</button>
+            <button class="tool-tab" data-tool="cli">{CLI}</button>
+            <button class="tool-tab" data-tool="mcp">{MCP Server}</button>
+          </div>
+        </div>
+
+        <div class="terminal-command-card">
+          <code class="terminal-code">
+            <span class="prompt-symbol">$</span>
+            <span id="commandSnippetText">npx context-skeleton scan</span>
+          </code>
+          <button id="btnCopyTerminal" class="btn-copy-terminal">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            Copy
           </button>
         </div>
       </div>
+    </section>
 
-      <!-- TRUSTED TOOLCHAIN BRAND STRIP -->
-      <div class="trusted-logos-container">
-        <span class="trusted-title">BUILT FOR NATIVE AI AGENT TOOLCHAINS</span>
-        <div class="logos-grid">
-          <div class="tool-chip">Claude Code</div>
-          <div class="tool-chip">Cursor AI</div>
-          <div class="tool-chip">Windsurf</div>
-          <div class="tool-chip">VS Code</div>
-          <div class="tool-chip">OpenAI GPT-4o</div>
-          <div class="tool-chip">Gemini 1.5 Pro</div>
+    <!-- LIVE CONSOLE PEEK PANEL (PINECONE-STYLE DASHBOARD CONSOLE) -->
+    <section id="console" class="console-peek-section">
+      <div class="container border-grid">
+        <div class="section-title-box">
+          <h2>Your repository skeletons, always visible</h2>
+          <p>Monitor token savings, explore AST symbol structures, and manage MCP indexes from a clean console.</p>
         </div>
-      </div>
 
-      <!-- METRICS BAR -->
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-val gradient-text" id="statTokensSaved">78.4%</div>
-          <div class="metric-lbl">Average Token Reduction</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-val" id="statCostSaved">$0.24</div>
-          <div class="metric-lbl">Saved per 100k Tokens</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-val">0.4ms</div>
-          <div class="metric-lbl">AST Parsing Latency</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-val">100%</div>
-          <div class="metric-lbl">Air-Gapped Local Privacy</div>
+        <div class="pinecone-console-card">
+          <div class="console-top-bar">
+            <div class="url-pill">app.contextskeleton.com/repo/main</div>
+            <div class="status-indicator"><span class="green-dot"></span> System Status: 100% Operational (0.4ms Latency)</div>
+          </div>
+
+          <div class="console-body">
+            <!-- SIDEBAR -->
+            <div class="console-sidebar">
+              <div class="nav-group-title">WORKSPACE</div>
+              <div class="console-nav-item active">📁 @context-skeleton/core</div>
+              <div class="console-nav-item">📁 @context-skeleton/cli</div>
+              <div class="console-nav-item">📁 @context-skeleton/mcp</div>
+              <div class="nav-group-title">MCP TOOLS</div>
+              <div class="console-nav-item">⚡ get_repo_skeleton</div>
+              <div class="console-nav-item">🔍 unfold_symbol</div>
+              <div class="console-nav-item">📊 get_token_savings</div>
+            </div>
+
+            <!-- MAIN PANEL -->
+            <div class="console-main-panel">
+              <div class="console-table-head">
+                <span>FILE / SYMBOL</span>
+                <span>ORIGINAL TOKENS</span>
+                <span>SKELETON TOKENS</span>
+                <span>SAVINGS (%)</span>
+                <span>STATUS</span>
+              </div>
+              <div class="console-table-row">
+                <span class="filename-cell">src/index.ts</span>
+                <span class="mono-cell">2,160</span>
+                <span class="mono-cell cyan">252</span>
+                <span class="badge-green">88.3%</span>
+                <span class="status-ready"><span class="dot-small"></span> Folded</span>
+              </div>
+              <div class="console-table-row">
+                <span class="filename-cell">src/parser/tree-sitter.ts</span>
+                <span class="mono-cell">4,820</span>
+                <span class="mono-cell cyan">910</span>
+                <span class="badge-green">81.1%</span>
+                <span class="status-ready"><span class="dot-small"></span> Folded</span>
+              </div>
+              <div class="console-table-row">
+                <span class="filename-cell">src/mcp/server.ts</span>
+                <span class="mono-cell">1,450</span>
+                <span class="mono-cell cyan">310</span>
+                <span class="badge-green">78.6%</span>
+                <span class="status-ready"><span class="dot-small"></span> Folded</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- LIVE PLAYGROUND SECTION -->
     <section id="playground" class="playground-section">
-      <div class="section-header">
-        <div class="mcp-badge">LIVE AST ENGINE DEMO</div>
-        <h2>Interactive AST Skeletonizer Playground</h2>
-        <p>Select a language below or paste your custom code to test instant AST skeletonization in real time.</p>
-      </div>
-
-      <div class="language-tabs">
-        <button class="tab-btn active" data-lang="ts">TypeScript / React</button>
-        <button class="tab-btn" data-lang="py">Python Engine</button>
-        <button class="tab-btn" data-lang="go">Go / Microservice</button>
-      </div>
-
-      <div class="editor-container">
-        <!-- INPUT CODE EDITOR -->
-        <div class="editor-pane">
-          <div class="editor-header">
-            <span>INPUT SOURCE CODE</span>
-            <span id="inputTokenCount" class="badge-tokens">Original: 342 tokens</span>
-          </div>
-          <textarea id="codeInput" class="code-textarea" spellcheck="false" placeholder="Paste your code here..."></textarea>
+      <div class="container border-grid">
+        <div class="section-title-box">
+          <span class="section-tag-sm">LIVE PLAYGROUND</span>
+          <h2>Interactive Code Skeletonizer Engine</h2>
+          <p>Paste your TypeScript, Python, or Go code below to see real-time AST skeleton folding and token savings.</p>
         </div>
 
-        <!-- SKELETON OUTPUT EDITOR -->
-        <div class="editor-pane">
-          <div class="editor-header">
-            <span>SKELETONIZED AST CONTEXT</span>
-            <span id="outputTokenCount" class="badge-tokens badge-success">Skeleton: 74 tokens (-78.4%)</span>
-          </div>
-          <textarea id="codeOutput" class="code-textarea readonly-textarea" readonly spellcheck="false"></textarea>
-          <div class="editor-overlay-actions">
-            <button id="btnCopySkeleton" class="btn-copy-skeleton">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              Copy Skeletonized Context
-            </button>
-          </div>
+        <div class="language-tabs-row">
+          <button class="tab-btn active" data-lang="ts">TypeScript / React</button>
+          <button class="tab-btn" data-lang="py">Python Engine</button>
+          <button class="tab-btn" data-lang="go">Go Microservice</button>
         </div>
-      </div>
 
-      <!-- LIVE SAVINGS BAR -->
-      <div class="savings-card-bar">
-        <div class="savings-info">
-          <span class="savings-title">Prompt Cost Saved:</span>
-          <span id="liveDollarSavings" class="savings-amount">$0.0008 / prompt</span>
-        </div>
-        <div class="badge-snippet-box">
-          <span class="badge-label">PR & .cursorrules Badge:</span>
-          <code id="badgeSnippet">⚡ Context optimized by ContextSkeleton (Saved 78.4% tokens)</code>
-          <button id="btnCopyBadge" class="btn-sm">Copy Badge</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ROI CALCULATOR SECTION -->
-    <section id="calculator" class="roi-section">
-      <div class="glass-card roi-card">
-        <div class="mcp-badge">INTERACTIVE SAVINGS ESTIMATOR</div>
-        <h2>Calculate Your Monthly API Savings</h2>
-        <p>Adjust your monthly LLM API spending slider to see how much ContextSkeleton saves your team.</p>
-
-        <div class="calculator-box">
-          <div class="slider-group">
-            <label for="spendSlider">Monthly LLM Prompt Spending: <strong id="spendVal">$1,000 / month</strong></label>
-            <input type="range" id="spendSlider" min="100" max="10000" step="100" value="1000">
-          </div>
-
-          <div class="roi-results-grid">
-            <div class="roi-item">
-              <div class="roi-label">Original Monthly Bill</div>
-              <div class="roi-value text-muted-val" id="roiOriginal">$1,000</div>
+        <div class="editor-container">
+          <!-- INPUT CODE EDITOR -->
+          <div class="editor-pane">
+            <div class="editor-header">
+              <span>INPUT SOURCE CODE</span>
+              <span id="inputTokenCount" class="badge-tokens">Original: 342 tokens</span>
             </div>
-            <div class="roi-item">
-              <div class="roi-label">Bill With ContextSkeleton</div>
-              <div class="roi-value text-cyan-val" id="roiNew">$220</div>
+            <textarea id="codeInput" class="code-textarea" spellcheck="false" placeholder="Paste code here..."></textarea>
+          </div>
+
+          <!-- SKELETON OUTPUT EDITOR -->
+          <div class="editor-pane">
+            <div class="editor-header">
+              <span>SKELETONIZED AST CONTEXT</span>
+              <span id="outputTokenCount" class="badge-tokens badge-success">Skeleton: 74 tokens (-78.4%)</span>
             </div>
-            <div class="roi-item highlight-item">
-              <div class="roi-label">Annual Capital Saved</div>
-              <div class="roi-value text-green-val" id="roiAnnual">$9,360 / year</div>
+            <textarea id="codeOutput" class="code-textarea readonly-textarea" readonly spellcheck="false"></textarea>
+            <div class="editor-overlay-actions">
+              <button id="btnCopySkeleton" class="btn-copy-skeleton">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy Context
+              </button>
             </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ARCHITECTURE SECTION -->
-    <section id="architecture" class="arch-section">
-      <div class="section-header">
-        <div class="mcp-badge">HOW IT WORKS</div>
-        <h2>AST Skeletonization vs Naive Context Pruning</h2>
-        <p>Why raw file dumping and line slicing fail where ContextSkeleton excels.</p>
-      </div>
-
-      <div class="arch-grid">
-        <div class="arch-card">
-          <div class="arch-step">01</div>
-          <h3>Parse & AST Folding</h3>
-          <p>Tree-Sitter parses source files into structural syntax trees, extracting signatures while stripping heavy method logic.</p>
-        </div>
-        <div class="arch-card">
-          <div class="arch-step">02</div>
-          <h3>Signature Preservation</h3>
-          <p>Exported interfaces, type aliases, class declarations, and JSDoc comments remain 100% syntactically intact.</p>
-        </div>
-        <div class="arch-card">
-          <div class="arch-step">03</div>
-          <h3>On-Demand Symbol Unfolding</h3>
-          <p>When the AI agent needs to modify a specific function, the MCP server unfolds the exact symbol implementation instantly.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- COMPARISON TABLE SECTION -->
-    <section id="comparison" class="comparison-section">
-      <div class="section-header">
-        <div class="mcp-badge">FEATURE COMPARISON</div>
-        <h2>Why Developers Switch to ContextSkeleton</h2>
-      </div>
-
-      <div class="table-container">
-        <table class="comp-table">
-          <thead>
-            <tr>
-              <th>Capability</th>
-              <th>Raw File Dumping</th>
-              <th>Naive Line Trimming</th>
-              <th class="active-col">ContextSkeleton ⚡</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Token Reduction</td>
-              <td>0% (Full Cost)</td>
-              <td>30-40% (Lossy)</td>
-              <td class="active-col"><strong>70 - 80% (Zero Loss)</strong></td>
-            </tr>
-            <tr>
-              <td>Syntax Correctness</td>
-              <td>Valid</td>
-              <td>❌ Broken Syntax</td>
-              <td class="active-col"><strong>✓ 100% Valid AST</strong></td>
-            </tr>
-            <tr>
-              <td>Context Window Latency</td>
-              <td>Slow (12-15s)</td>
-              <td>Medium (6-8s)</td>
-              <td class="active-col"><strong>Fast (0.4ms)</strong></td>
-            </tr>
-            <tr>
-              <td>Model Context Protocol (MCP)</td>
-              <td>❌ No</td>
-              <td>❌ No</td>
-              <td class="active-col"><strong>✓ Native Stdio MCP</strong></td>
-            </tr>
-            <tr>
-              <td>Air-Gapped Local Execution</td>
-              <td>Varies</td>
-              <td>Varies</td>
-              <td class="active-col"><strong>✓ 100% Local Wasm</strong></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ENTERPRISE FEATURES SECTION -->
-    <section id="features" class="features-section">
-      <div class="section-header">
-        <div class="mcp-badge">ENTERPRISE CAPABILITIES</div>
-        <h2>Engineered for High-Velocity Software Teams</h2>
-      </div>
-
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🌳</div>
-          <h3>AST Structural Pruning</h3>
-          <p>Folds function and method implementations while retaining exported interfaces, types, parameters, and JSDoc documentation.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🔌</div>
-          <h3>Model Context Protocol (MCP)</h3>
-          <p>Native stdio MCP server exposing `get_repo_skeleton` and `unfold_symbol` directly into Cursor, Claude Code, and Windsurf.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🛡️</div>
-          <h3>100% Air-Gapped Privacy</h3>
-          <p>Runs entirely in local memory via Wasm and client-side JS. Zero source code or API keys are ever transmitted to cloud servers.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>0.4ms Ultra Latency</h3>
-          <p>Sub-millisecond AST parser execution built with Node.js & Wasm performance benchmarks.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🔍</div>
-          <h3>Secret & PII Auto-Masking</h3>
-          <p>Automatically scans AST nodes for high-entropy strings and secret keys, replacing them with `[SECRET_MASKED]`.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🤖</div>
-          <h3>CI/CD PR Action Engine</h3>
-          <p>Injects automated context-reduction badges and token budget reports directly into GitHub Pull Requests.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- TESTIMONIALS / WALL OF LOVE -->
-    <section class="testimonials-section">
-      <div class="section-header">
-        <div class="mcp-badge">WALL OF LOVE</div>
-        <h2>Loved by Senior Engineers & AI Builders</h2>
-      </div>
-
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <p class="quote-text">"ContextSkeleton dropped our Cursor prompt bill from $1,400 to $310/month. The MCP server unfolding capability is pure magic."</p>
-          <div class="user-info">
-            <div class="user-name">Alex Rivera</div>
-            <div class="user-role">Staff Architect @ Scale AI</div>
+        <!-- SAVINGS METRICS BAR -->
+        <div class="savings-card-bar">
+          <div class="savings-info">
+            <span class="savings-title">Prompt Cost Saved:</span>
+            <span id="liveDollarSavings" class="savings-amount">$0.0008 / prompt</span>
           </div>
-        </div>
-
-        <div class="testimonial-card">
-          <p class="quote-text">"Before ContextSkeleton, Claude Code routinely ran out of context on multi-file refactors. Now we get clean AST skeletons instantly."</p>
-          <div class="user-info">
-            <div class="user-name">Elena Rostova</div>
-            <div class="user-role">Principal Engineer @ DevTools Inc</div>
-          </div>
-        </div>
-
-        <div class="testimonial-card">
-          <p class="quote-text">"The AST skeletonizer preserves JSDoc comments and signatures perfectly. It's the most effective developer tool we added this year."</p>
-          <div class="user-info">
-            <div class="user-name">Marcus Vance</div>
-            <div class="user-role">Founder @ Agentic Stack</div>
+          <div class="badge-snippet-box">
+            <span class="badge-label">PR & .cursorrules Badge:</span>
+            <code id="badgeSnippet">⚡ Context optimized by ContextSkeleton (Saved 78.4% tokens)</code>
+            <button id="btnCopyBadge" class="btn-sm">Copy Badge</button>
           </div>
         </div>
       </div>
@@ -370,136 +226,92 @@
 
     <!-- PRICING SECTION -->
     <section id="pricing" class="pricing-section">
-      <div class="section-header">
-        <div class="mcp-badge">MONETIZATION & PLANS</div>
-        <h2>Flexible Pricing for Developers & Engineering Teams</h2>
-        <p>Start free with open-source CLI. Upgrade as your team scales.</p>
-      </div>
-
-      <div class="pricing-grid">
-        <!-- FREE PLAN -->
-        <div class="pricing-card">
-          <div class="plan-name">Open Source</div>
-          <div class="plan-price">$0 <span>/ month</span></div>
-          <p class="plan-desc">For indie hackers and individual developers</p>
-          <ul class="plan-features">
-            <li>✓ Unlimited local CLI code scanning</li>
-            <li>✓ Full AST folding engine (TS, Py, Go, Rust)</li>
-            <li>✓ Standard MCP Server integration</li>
-            <li>✓ Community Support</li>
-          </ul>
-          <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-plan btn-plan-outline">Install Open Source</a>
+      <div class="container border-grid">
+        <div class="section-title-box">
+          <span class="section-tag-sm">PRICING</span>
+          <h2>Cost-performance at any scale</h2>
+          <p>Start for free with open-source CLI. Scale with enterprise team servers.</p>
         </div>
 
-        <!-- PRO PLAN -->
-        <div class="pricing-card featured-plan">
-          <div class="popular-tag">MOST POPULAR</div>
-          <div class="plan-name">Pro Developer</div>
-          <div class="plan-price">$12 <span>/ month</span></div>
-          <p class="plan-desc">For professional engineers & power AI agent users</p>
-          <ul class="plan-features">
-            <li>✓ Everything in Free, plus:</li>
-            <li>✓ Real-time VS Code & Cursor Extension</li>
-            <li>✓ Cross-repo dependency graph visualizer</li>
-            <li>✓ Custom AST folding & preservation rules</li>
-            <li>✓ Priority Email & Discord Support</li>
-          </ul>
-          <button class="btn-plan btn-plan-primary btn-checkout" data-plan="pro">Upgrade to Pro ($12/mo)</button>
-        </div>
+        <div class="pricing-grid">
+          <!-- FREE -->
+          <div class="pricing-card">
+            <div class="plan-name">Open Source</div>
+            <div class="plan-price">$0 <span>/ month</span></div>
+            <p class="plan-desc">For indie developers & open-source projects</p>
+            <ul class="plan-features">
+              <li>✓ Unlimited local CLI code scanning</li>
+              <li>✓ Full AST folding engine (TS, Py, Go, Rust)</li>
+              <li>✓ Standard MCP Server integration</li>
+              <li>✓ Community Support</li>
+            </ul>
+            <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-plan-outline">Install Open Source</a>
+          </div>
 
-        <!-- TEAM PLAN -->
-        <div class="pricing-card">
-          <div class="plan-name">Team & Enterprise</div>
-          <div class="plan-price">$49 <span>/ seat / month</span></div>
-          <p class="plan-desc">For engineering organizations and startups</p>
-          <ul class="plan-features">
-            <li>✓ Everything in Pro, plus:</li>
-            <li>✓ CI/CD PR context pruner (GitHub Actions)</li>
-            <li>✓ Automated secret & PII masking</li>
-            <li>✓ Team context skeleton sync</li>
-            <li>✓ Dedicated account manager & SLA</li>
-          </ul>
-          <button class="btn-plan btn-plan-outline btn-checkout" data-plan="team">Start Team Trial ($49/mo)</button>
-        </div>
-      </div>
-    </section>
+          <!-- PRO -->
+          <div class="pricing-card featured">
+            <div class="popular-tag">MOST POPULAR</div>
+            <div class="plan-name">Pro Developer</div>
+            <div class="plan-price">$12 <span>/ month</span></div>
+            <p class="plan-desc">For professional engineers & power AI users</p>
+            <ul class="plan-features">
+              <li>✓ Everything in Free, plus:</li>
+              <li>✓ Real-time VS Code & Cursor Extension</li>
+              <li>✓ Cross-repo dependency graph visualizer</li>
+              <li>✓ Custom AST folding & preservation rules</li>
+              <li>✓ Priority Email & Discord Support</li>
+            </ul>
+            <button class="btn-plan-primary btn-checkout" data-plan="pro">Upgrade to Pro ($12/mo)</button>
+          </div>
 
-    <!-- FAQ SECTION -->
-    <section id="faq" class="faq-section">
-      <div class="section-header">
-        <div class="mcp-badge">FREQUENTLY ASKED QUESTIONS</div>
-        <h2>Everything You Need to Know</h2>
-      </div>
-
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Does ContextSkeleton send my code to any server?</summary>
-          <p>No. ContextSkeleton runs 100% locally on your machine via client-side Wasm and local CLI. Zero bytes of your source code ever leave your environment.</p>
-        </details>
-
-        <details class="faq-item">
-          <summary>How does AST folding prevent context rot?</summary>
-          <p>By removing deep function bodies while keeping function signatures, types, and JSDoc comments, the AI agent understands your entire architectural skeleton without being overwhelmed by implementation details.</p>
-        </details>
-
-        <details class="faq-item">
-          <summary>How do I connect ContextSkeleton to Cursor or Claude Code?</summary>
-          <p>Simply add our stdio MCP server to your `claude_desktop_config.json` or `.cursorrules`. It exposes tools that allow the AI to query repository skeletons automatically.</p>
-        </details>
-      </div>
-    </section>
-
-    <!-- MCP SERVER INTEGRATION -->
-    <section id="mcp" class="mcp-section">
-      <div class="glass-card mcp-card">
-        <div class="mcp-badge">MCP PROTOCOL INTEGRATION</div>
-        <h2>Native Model Context Protocol Server</h2>
-        <p>Integrate ContextSkeleton directly with Claude Code, Cursor, and AGY AI Agents via standard stdio JSON-RPC.</p>
-
-        <div class="code-snippet-block">
-          <div class="code-title">claude_desktop_config.json / .cursorrules</div>
-          <pre><code>{
-  "mcpServers": {
-    "context-skeleton": {
-      "command": "npx",
-      "args": ["-y", "@context-skeleton/mcp-server"]
-    }
-  }
-}</code></pre>
+          <!-- TEAM -->
+          <div class="pricing-card">
+            <div class="plan-name">Team & Enterprise</div>
+            <div class="plan-price">$49 <span>/ seat / month</span></div>
+            <p class="plan-desc">For engineering organizations & startups</p>
+            <ul class="plan-features">
+              <li>✓ Everything in Pro, plus:</li>
+              <li>✓ CI/CD PR context pruner (GitHub Actions)</li>
+              <li>✓ Automated secret & PII masking</li>
+              <li>✓ Team context skeleton sync</li>
+              <li>✓ Dedicated account manager & SLA</li>
+            </ul>
+            <button class="btn-plan-outline btn-checkout" data-plan="team">Start Team Trial ($49/mo)</button>
+          </div>
         </div>
       </div>
     </section>
-  </main>
 
-  <!-- CHECKOUT MODAL -->
-  <div id="checkoutModal" class="modal-overlay hidden">
-    <div class="modal-card">
-      <button id="closeModal" class="modal-close">&times;</button>
-      <div class="modal-header">
-        <span class="modal-badge">SECURE PAYMENT</span>
-        <h3 id="modalPlanTitle">Subscribe to Pro Developer</h3>
-        <div class="modal-price" id="modalPlanPrice">$12.00 / month</div>
-      </div>
-      <div class="modal-body">
-        <p>Unlock enterprise AST visualizers, VS Code extension sync, and secret auto-masking.</p>
-        <div class="payment-options">
-          <button class="btn-payment stripe-btn" onclick="alert('Redirecting to Secure Payment Portal (Stripe / LemonSqueezy)...')">
-            💳 Pay with Credit Card / Apple Pay
-          </button>
+    <!-- CHECKOUT MODAL -->
+    <div id="checkoutModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <button id="closeModal" class="modal-close">&times;</button>
+        <div class="modal-header">
+          <span class="modal-badge">SECURE PAYMENT</span>
+          <h3 id="modalPlanTitle">Subscribe to Pro Developer</h3>
+          <div class="modal-price" id="modalPlanPrice">$12.00 / month</div>
         </div>
-        <div class="guarantee-note">🔒 14-day money back guarantee. Cancel anytime.</div>
+        <div class="modal-body">
+          <p>Unlock enterprise AST visualizers, VS Code extension sync, and secret auto-masking.</p>
+          <div class="payment-options">
+            <button class="btn-payment stripe-btn" onclick="alert('Redirecting to Secure Payment Portal (Stripe / LemonSqueezy)...')">
+              💳 Pay with Credit Card / Apple Pay
+            </button>
+          </div>
+          <div class="guarantee-note">🔒 14-day money back guarantee. Cancel anytime.</div>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 
   <footer>
-    <div class="footer-container">
+    <div class="container footer-container">
       <div class="footer-links">
         <a href="./privacy.html">Privacy Policy</a> • 
         <a href="./terms.html">Terms of Service</a> • 
         <a href="./security.html">Security Policy</a>
       </div>
-      <p style="margin-top: 0.8rem;">© 2026 ContextSkeleton Inc. — A Product of <strong>Antigravity Labs</strong> portfolio.</p>
+      <p style="margin-top: 0.8rem;">© 2026 ContextSkeleton Inc. — A Product of <strong>Antigravity Labs</strong>.</p>
     </div>
   </footer>
 
