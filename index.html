@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The AST Skeletonizer for Knowledgeable AI | ContextSkeleton</title>
+  <meta name="description" content="Give AI agents context. Fast retrieval. Accurate results. Lower costs. Start in seconds with ContextSkeleton.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --brand-blue: #002BFF;
+      --brand-blue-hover: #0022cc;
+      --bg-white: #ffffff;
+      --bg-paper: #f8fafc;
+      --border-light: #e2e8f0;
+      --text-dark: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-white);
+      color: var(--text-dark);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TOP ANNOUNCEMENT BAR */
+    .announcement-bar {
+      background-color: var(--brand-blue);
+      color: #ffffff;
+      padding: 0.6rem 0;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .announcement-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .announcement-link {
+      color: #ffffff;
+      text-decoration: underline;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      border-bottom: 1px solid var(--border-light);
+      background: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-icon {
+      color: var(--brand-blue);
+      font-size: 1.4rem;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .nav-menu a:hover {
+      color: var(--brand-blue);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+    }
+
+    .btn-blue {
+      background-color: var(--brand-blue);
+      color: #ffffff;
+      padding: 0.6rem 1.3rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--brand-blue);
+      transition: background-color 0.15s ease;
+    }
+
+    .btn-blue:hover {
+      background-color: var(--brand-blue-hover);
+    }
+
+    /* HERO SECTION (EXACT PINECONE LAYOUT) */
+    .hero-section {
+      border-bottom: 1px solid var(--border-light);
+      padding: 5rem 0 6rem;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-tag {
+      color: var(--brand-blue);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -1.8px;
+      color: var(--text-dark);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title .highlight-blue {
+      color: var(--brand-blue);
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    /* PINECONE CORNER CROSSHAIR BUTTONS */
+    .btn-group {
+      display: flex;
+      gap: 1.2rem;
+    }
+
+    .btn-crosshair {
+      position: relative;
+      padding: 0.85rem 2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+
+    .btn-crosshair-solid {
+      background-color: var(--brand-blue);
+      color: #ffffff;
+      border: 1px solid var(--brand-blue);
+    }
+
+    .btn-crosshair-outline {
+      background-color: #ffffff;
+      color: var(--text-dark);
+      border: 1px solid var(--border-light);
+    }
+
+    .crosshair-corner {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border: 1px dashed var(--brand-blue);
+    }
+    .tl { top: -3px; left: -3px; border-right: none; border-bottom: none; }
+    .tr { top: -3px; right: -3px; border-left: none; border-bottom: none; }
+    .bl { bottom: -3px; left: -3px; border-right: none; border-top: none; }
+    .br { bottom: -3px; right: -3px; border-left: none; border-top: none; }
+
+    /* RADAR CANVAS GRAPHIC */
+    .hero-graphic-box {
+      position: relative;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #radarCanvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* LOGO BAR */
+    .logo-bar {
+      border-bottom: 1px solid var(--border-light);
+      padding: 3rem 0;
+      background: var(--bg-paper);
+    }
+
+    .logo-bar-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      opacity: 0.75;
+      filter: grayscale(100%);
+      transition: filter 0.3s ease;
+    }
+
+    .logo-bar-flex:hover {
+      filter: grayscale(0%);
+    }
+
+    .logo-item {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #475569;
+      letter-spacing: -0.5px;
+    }
+
+    /* INTEGRATION SECTION (PINECONE GET STARTED TABS) */
+    .integration-section {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .integration-tabs {
+      display: flex;
+      gap: 1.5rem;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 2rem;
+    }
+
+    .tab-item {
+      padding: 0.8rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .tab-item.active {
+      color: var(--brand-blue);
+      border-bottom-color: var(--brand-blue);
+      font-weight: 600;
+    }
+
+    .terminal-box {
+      background: var(--bg-paper);
+      border: 1px solid var(--border-light);
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+    }
+
+    .term-prefix {
+      color: var(--brand-blue);
+      margin-right: 0.8rem;
+      font-weight: 600;
+    }
+
+    .btn-copy {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      padding: 0.4rem 0.9rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* LIVE INTERACTIVE CONSOLE / PLAYGROUND */
+    .playground-section {
+      padding: 6rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+    }
+
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .editor-card {
+      border: 1px solid var(--border-light);
+      background: var(--bg-paper);
+      overflow: hidden;
+    }
+
+    .editor-head {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-light);
+      padding: 0.8rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .token-badge {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .token-badge.green {
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    textarea.code-area {
+      width: 100%;
+      height: 380px;
+      border: none;
+      background: transparent;
+      padding: 1.2rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      resize: none;
+      outline: none;
+      line-height: 1.6;
+      color: var(--text-dark);
+    }
+
+    textarea.readonly-area {
+      color: var(--brand-blue);
+      background: #ffffff;
+    }
+
+    /* PRICING SECTION */
+    .pricing-section {
+      padding: 6rem 0;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .pricing-card {
+      border: 1px solid var(--border-light);
+      padding: 2.5rem;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pricing-card.popular {
+      border: 2px solid var(--brand-blue);
+    }
+
+    .plan-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-price {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin: 1rem 0;
+    }
+
+    .plan-price span {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .plan-features {
+      list-style: none;
+      margin: 1.5rem 0 2.5rem;
+      flex-grow: 1;
+    }
+
+    .plan-features li {
+      margin-bottom: 0.6rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-light);
+      padding: 3rem 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP ANNOUNCEMENT BAR -->
+  <div class="announcement-bar">
+    <div class="container announcement-flex">
+      <span>Pinecone Nexus & ContextSkeleton v1.0.0 in Public Preview — <span class="announcement-link">Read the announcement</span></span>
+      <span style="font-size: 0.8rem; cursor: pointer;">Dismiss ✕</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-flex">
+      <a href="#" class="brand-logo">
+        <span class="brand-icon">⚡</span> ContextSkeleton
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#products">Products</a></li>
+        <li><a href="#enterprise">Enterprise</a></li>
+        <li><a href="#customers">Customers</a></li>
+        <li><a href="#resources">Resources</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#contact" class="btn-link">Contact</a>
+        <a href="#login" class="btn-link">Log in</a>
+        <a href="#pricing" class="btn-blue">Start for free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION (MATCHING PINECONE EXACTLY) -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div class="hero-left">
+        <span class="hero-tag">BUILD KNOWLEDGEABLE AI</span>
+        <h1 class="hero-title">Give agents <span class="highlight-blue">context</span></h1>
+        <p class="hero-subtitle">Fast retrieval. Accurate results. Lower costs.<br>Start in seconds.</p>
+        
+        <div class="btn-group">
+          <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-crosshair btn-crosshair-solid">
+            Start Building
+            <div class="crosshair-corner tl"></div>
+            <div class="crosshair-corner tr"></div>
+            <div class="crosshair-corner bl"></div>
+            <div class="crosshair-corner br"></div>
+          </a>
+
+          <a href="#playground" class="btn-crosshair btn-crosshair-outline">
+            Get a Demo
+            <div class="crosshair-corner tl"></div>
+            <div class="crosshair-corner tr"></div>
+            <div class="crosshair-corner bl"></div>
+            <div class="crosshair-corner br"></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- RADAR CANVAS GRAPHIC (RIGHT SIDE) -->
+      <div class="hero-graphic-box">
+        <canvas id="radarCanvas"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGO MARQUEE BAR -->
+  <section class="logo-bar">
+    <div class="container logo-bar-flex">
+      <div class="logo-item">OpenAI</div>
+      <div class="logo-item">cohere</div>
+      <div class="logo-item">FOX</div>
+      <div class="logo-item">The Washington Post</div>
+      <div class="logo-item">asana</div>
+      <div class="logo-item">GONG</div>
+    </div>
+  </section>
+
+  <!-- GET STARTED TABS -->
+  <section class="integration-section">
+    <div class="container">
+      <div class="section-label">GET STARTED</div>
+      <div class="integration-tabs">
+        <div class="tab-item active" data-tool="claude">{Claude Code}</div>
+        <div class="tab-item" data-tool="cursor">{Cursor}</div>
+        <div class="tab-item" data-tool="copilot">{Copilot}</div>
+        <div class="tab-item" data-tool="codex">{Codex}</div>
+        <div class="tab-item" data-tool="gemini">{Gemini}</div>
+        <div class="tab-item" data-tool="cli">{CLI}</div>
+        <div class="tab-item" data-tool="mcp">{MCP}</div>
+      </div>
+
+      <div class="terminal-box">
+        <div>
+          <span class="term-prefix">$</span>
+          <span id="cmdText">claude plugin install context-skeleton</span>
+        </div>
+        <button id="copyBtn" class="btn-copy">Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE PLAYGROUND -->
+  <section id="playground" class="playground-section">
+    <div class="container">
+      <h2 class="section-title">Interactive AST Code Skeletonizer</h2>
+      <p class="section-desc">Experience 80% token reduction in real time.</p>
+
+      <div class="editor-grid">
+        <div class="editor-card">
+          <div class="editor-head">
+            <span>INPUT SOURCE CODE</span>
+            <span id="inputTokens" class="token-badge">Original: 342 tokens</span>
+          </div>
+          <textarea id="codeInput" class="code-area" spellcheck="false"></textarea>
+        </div>
+
+        <div class="editor-card">
+          <div class="editor-head">
+            <span>SKELETONIZED AST CONTEXT</span>
+            <span id="outputTokens" class="token-badge green">Skeleton: 74 tokens (-78.4%)</span>
+          </div>
+          <textarea id="codeOutput" class="code-area readonly-area" readonly spellcheck="false"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="pricing-section">
+    <div class="container">
+      <h2 class="section-title">Cost-performance at any scale</h2>
+      <p class="section-desc">Estimate the cost of your workload.</p>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="plan-title">Open Source</div>
+          <div class="plan-price">$0 <span>/ month</span></div>
+          <ul class="plan-features">
+            <li>✓ Unlimited local CLI scanning</li>
+            <li>✓ Full AST folding engine</li>
+            <li>✓ Standard MCP Server integration</li>
+          </ul>
+          <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-crosshair btn-crosshair-outline">Install Free</a>
+        </div>
+
+        <div class="pricing-card popular">
+          <div class="plan-title">Pro Developer</div>
+          <div class="plan-price">$12 <span>/ month</span></div>
+          <ul class="plan-features">
+            <li>✓ Everything in Free, plus:</li>
+            <li>✓ VS Code & Cursor Extension</li>
+            <li>✓ Cross-repo dependency visualizer</li>
+          </ul>
+          <a href="#" class="btn-crosshair btn-crosshair-solid">Start Pro Trial</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="plan-title">Enterprise</div>
+          <div class="plan-price">$49 <span>/ seat / mo</span></div>
+          <ul class="plan-features">
+            <li>✓ Everything in Pro, plus:</li>
+            <li>✓ CI/CD PR context pruner</li>
+            <li>✓ Secret & PII auto-masking</li>
+          </ul>
+          <a href="#" class="btn-crosshair btn-crosshair-outline">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 ContextSkeleton Systems, Inc. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // CODE SKELETONIZER ENGINE
+    function estimateTokens(text) {
+      if (!text) return 0;
+      const wordCount = (text.match(/\w+/g) || []).length;
+      const symbolCount = (text.match(/[{}[\]();:=><+\-*\/&|!.,?]/g) || []).length;
+      return Math.ceil((wordCount * 0.75) + (symbolCount * 0.4) + (text.length * 0.05));
+    }
+
+    function skeletonizeCode(code) {
+      const lines = code.split('\n');
+      const result = [];
+      let inFunction = false;
+      let blockDepth = 0;
+      let foldedLines = 0;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
+        const openBraces = (line.match(/\{/g) || []).length;
+        const closeBraces = (line.match(/\}/g) || []).length;
+
+        if (inFunction) {
+          blockDepth += (openBraces - closeBraces);
+          if (blockDepth <= 0) {
+            inFunction = false;
+            if (foldedLines > 0) result.push(`  /* ... [folded implementation: ${foldedLines} lines] ... */`);
+            result.push('}');
+          } else {
+            foldedLines++;
+          }
+          continue;
+        }
+
+        const isSig = /^(export\s+)?(async\s+)?(function|class|interface|type|enum|const\s+\w+\s*=)/.test(trimmed);
+        if (isSig && line.includes('{')) {
+          inFunction = true;
+          blockDepth = Math.max(1, openBraces - closeBraces);
+          foldedLines = 0;
+          const braceIdx = line.lastIndexOf('{');
+          result.push(braceIdx !== -1 ? line.substring(0, braceIdx + 1) : line);
+          continue;
+        }
+
+        result.push(line);
+      }
+
+      const skel = result.join('\n');
+      const origT = estimateTokens(code);
+      const skelT = estimateTokens(skel);
+      const savedPct = origT > 0 ? (((origT - skelT) / origT) * 100).toFixed(1) : 0;
+
+      return { skel, origT, skelT, savedPct };
+    }
+
+    const SAMPLE = `import { useState, useEffect } from 'react';
+import { fetchUserData, updateProfile } from './api';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export function UserDashboard({ userId }: { userId: string }) {
+  const [user, setUser] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    async function loadData() {
+      const data = await fetchUserData(userId);
+      setUser(data);
+    }
+    loadData();
+  }, [userId]);
+
+  return <div className="dashboard">Welcome, {user?.name}</div>;
+}`;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('codeInput');
+      const output = document.getElementById('codeOutput');
+      const inTokens = document.getElementById('inputTokens');
+      const outTokens = document.getElementById('outputTokens');
+
+      function update() {
+        const res = skeletonizeCode(input.value);
+        output.value = res.skel;
+        inTokens.textContent = `Original: ${res.origT} tokens`;
+        outTokens.textContent = `Skeleton: ${res.skelT} tokens (-${res.savedPct}%)`;
+      }
+
+      if (input) {
+        input.value = SAMPLE;
+        update();
+        input.addEventListener('input', update);
+      }
+
+      // TABS
+      const tabs = document.querySelectorAll('.tab-item');
+      const cmd = document.getElementById('cmdText');
+      tabs.forEach(t => {
+        t.addEventListener('click', () => {
+          tabs.forEach(x => x.classList.remove('active'));
+          t.classList.add('active');
+          const tool = t.dataset.tool;
+          if (tool === 'claude') cmd.textContent = 'claude plugin install context-skeleton';
+          else if (tool === 'cursor') cmd.textContent = 'npx context-skeleton scan';
+          else if (tool === 'copilot') cmd.textContent = 'code --install-extension context-skeleton';
+          else if (tool === 'mcp') cmd.textContent = 'npx -y @context-skeleton/mcp-server';
+          else cmd.textContent = 'npx context-skeleton scan';
+        });
+      });
+
+      document.getElementById('copyBtn')?.addEventListener('click', () => {
+        navigator.clipboard.writeText(cmd.textContent);
+        const b = document.getElementById('copyBtn');
+        b.textContent = '✓ Copied!';
+        setTimeout(() => { b.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    // RADAR CANVAS ANIMATION (EXACT MATCH TO PINECONE HERO GRAPHIC)
+    const canvas = document.getElementById('radarCanvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = 400;
+      let h = canvas.height = 400;
+
+      let angle = 0;
+      const dots = Array.from({ length: 8 }, () => ({
+        r: Math.random() * 120 + 30,
+        a: Math.random() * Math.PI * 2,
+        size: Math.random() * 4 + 3
+      }));
+
+      function drawRadar() {
+        ctx.clearRect(0, 0, w, h);
+        const cx = w / 2;
+        const cy = h / 2;
+
+        // Draw concentric circles
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        [50, 100, 150].forEach(r => {
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.stroke();
+        });
+
+        // Draw radar dots
+        dots.forEach(d => {
+          const x = cx + Math.cos(d.a) * d.r;
+          const y = cy + Math.sin(d.a) * d.r;
+
+          ctx.beginPath();
+          ctx.arc(x, y, d.size, 0, Math.PI * 2);
+          ctx.fillStyle = '#002BFF';
+          ctx.shadowBlur = 12;
+          ctx.shadowColor = '#002BFF';
+          ctx.fill();
+        });
+
+        angle += 0.015;
+        requestAnimationFrame(drawRadar);
+      }
+      drawRadar();
+    }
+  </script>
+</body>
+</html>
