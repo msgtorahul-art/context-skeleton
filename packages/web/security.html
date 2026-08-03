@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Policy — ContextSkeleton</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body style="padding: 3rem 1.5rem; max-width: 800px; margin: 0 auto;">
+  <header style="margin-bottom: 2rem;">
+    <a href="./" style="color: var(--primary-cyan); text-decoration: none; font-weight: 600;">← Back to ContextSkeleton</a>
+    <h1 style="font-size: 2.5rem; margin-top: 1rem;">Security Policy</h1>
+    <p style="color: var(--text-muted);">Last Updated: August 2026</p>
+  </header>
+
+  <main style="color: #cbd5e1; line-height: 1.8;">
+    <h2 style="color: #fff; margin-top: 1.5rem;">1. Air-Gapped Local Architecture</h2>
+    <p>ContextSkeleton requires zero external network connections to prune code syntax. Secret API keys, credentials, and proprietary code logic stay strictly inside your workstation environment.</p>
+
+    <h2 style="color: #fff; margin-top: 1.5rem;">2. Secret & PII Auto-Masking</h2>
+    <p>Enterprise and Pro versions automatically scan AST nodes for high-entropy strings, passwords, and private tokens, replacing them with `[SECRET_MASKED]` before prompt assembly.</p>
+
+    <h2 style="color: #fff; margin-top: 1.5rem;">3. Vulnerability Reporting</h2>
+    <p>Please report any security concerns directly to security@contextskeleton.com.</p>
+  </main>
+</body>
+</html>

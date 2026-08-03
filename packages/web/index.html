@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ContextSkeleton — Cut LLM Context Costs by 80% with AST Code Folding</title>
+  <title>ContextSkeleton — Enterprise AST Code Skeletonizer & LLM Cost Optimizer</title>
   <meta name="description" content="Zero-latency AST code folding CLI, MCP Server, and Web Visualizer that compresses codebases into syntactically valid skeletons for Cursor, Claude Code, Windsurf, and AI Agents.">
   
   <!-- OpenGraph / Social Media SEO -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://msgtorahul-art.github.io/context-skeleton/">
+  <meta property="og:url" content="https://contextskeleton.com/">
   <meta property="og:title" content="ContextSkeleton — Cut LLM Context Costs by 80%">
-  <meta property="og:description" content="Open-source AST code folding CLI & MCP server for Cursor, Claude Code, and Windsurf.">
+  <meta property="og:description" content="Enterprise AST code folding CLI & MCP server for Cursor, Claude Code, and Windsurf.">
   <meta property="og:image" content="https://img.shields.io/badge/%E2%9A%A1_ContextSkeleton-78%25_Tokens_Saved-00f2fe?style=for-the-badge">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
   
   <!-- PARENT COMPANY TOP BANNER -->
   <div class="top-announcement-bar">
-    <span>🚀 Built by <strong>Antigravity Labs</strong> — Building the next generation of $1M+ AI tools</span>
+    <span>🚀 Built by <strong>Antigravity Labs</strong> — Enterprise AI Infrastructure Portfolio</span>
   </div>
 
   <header class="navbar">
@@ -35,8 +35,9 @@
       </div>
       <nav class="nav-links">
         <a href="#playground">Playground</a>
+        <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a href="#mcp">MCP Server</a>
+        <a href="#faq">FAQ</a>
         <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-github">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
           GitHub
@@ -69,6 +70,19 @@
         <a href="#pricing" class="btn-primary">Get Started Free →</a>
       </div>
 
+      <!-- TRUSTED TOOLS LOGOS BAR -->
+      <div class="trusted-logos-container">
+        <span class="trusted-title">WORKS NATIVELY WITH YOUR AI TOOLCHAIN</span>
+        <div class="logos-grid">
+          <div class="tool-chip">Claude Code</div>
+          <div class="tool-chip">Cursor AI</div>
+          <div class="tool-chip">Windsurf</div>
+          <div class="tool-chip">VS Code</div>
+          <div class="tool-chip">OpenAI GPT-4o</div>
+          <div class="tool-chip">Gemini 1.5 Pro</div>
+        </div>
+      </div>
+
       <!-- METRICS BAR -->
       <div class="metrics-grid">
         <div class="metric-card">
@@ -85,7 +99,7 @@
         </div>
         <div class="metric-card">
           <div class="metric-val">100%</div>
-          <div class="metric-lbl">Client-Side & Offline</div>
+          <div class="metric-lbl">Client-Side Privacy</div>
         </div>
       </div>
     </section>
@@ -139,6 +153,34 @@
           <span class="badge-label">PR & .cursorrules Badge:</span>
           <code id="badgeSnippet">⚡ Context optimized by ContextSkeleton (Saved 78.4% tokens)</code>
           <button id="btnCopyBadge" class="btn-sm">Copy Badge</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="features-section">
+      <div class="section-header">
+        <div class="mcp-badge">ENTERPRISE CAPABILITIES</div>
+        <h2>Engineered for High-Velocity Software Teams</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🌳</div>
+          <h3>AST Structural Pruning</h3>
+          <p>Folds function and method implementations while retaining exported interfaces, types, parameters, and JSDoc documentation.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔌</div>
+          <h3>Model Context Protocol (MCP)</h3>
+          <p>Native stdio MCP server exposing `get_repo_skeleton` and `unfold_symbol` directly into Cursor, Claude Code, and Windsurf.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>100% Air-Gapped Privacy</h3>
+          <p>Runs entirely in local memory via Wasm and client-side JS. Zero source code or API keys are ever transmitted to cloud servers.</p>
         </div>
       </div>
     </section>
@@ -199,6 +241,31 @@
       </div>
     </section>
 
+    <!-- FAQ SECTION -->
+    <section id="faq" class="faq-section">
+      <div class="section-header">
+        <div class="mcp-badge">FREQUENTLY ASKED QUESTIONS</div>
+        <h2>Everything You Need to Know</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Does ContextSkeleton send my code to any server?</summary>
+          <p>No. ContextSkeleton runs 100% locally on your machine via client-side Wasm and local CLI. Zero bytes of your source code ever leave your environment.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>How does AST folding prevent context rot?</summary>
+          <p>By removing deep function bodies while keeping function signatures, types, and JSDoc comments, the AI agent understands your entire architectural skeleton without being overwhelmed by implementation details.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do I connect ContextSkeleton to Cursor or Claude Code?</summary>
+          <p>Simply add our stdio MCP server to your `claude_desktop_config.json` or `.cursorrules`. It exposes tools that allow the AI to query repository skeletons automatically.</p>
+        </details>
+      </div>
+    </section>
+
     <!-- MCP SERVER INTEGRATION -->
     <section id="mcp" class="mcp-section">
       <div class="glass-card mcp-card">
@@ -244,7 +311,12 @@
 
   <footer>
     <div class="footer-container">
-      <p>© 2026 ContextSkeleton Inc. — A Product of <strong>Antigravity Labs</strong> incubator portfolio.</p>
+      <div class="footer-links">
+        <a href="./privacy.html">Privacy Policy</a> • 
+        <a href="./terms.html">Terms of Service</a> • 
+        <a href="./security.html">Security Policy</a>
+      </div>
+      <p style="margin-top: 0.8rem;">© 2026 ContextSkeleton Inc. — A Product of <strong>Antigravity Labs</strong> portfolio.</p>
     </div>
   </footer>
 
