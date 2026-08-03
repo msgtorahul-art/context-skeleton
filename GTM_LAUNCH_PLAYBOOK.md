@@ -2,16 +2,16 @@
 
 ## 🚀 Product Hunt Launch Title & Tagline
 **Product Name:** ContextSkeleton  
-**Tagline:** Cut LLM context costs by 80% with zero-latency structural code folding  
+**Tagline:** Cut LLM context costs with zero-latency structural code folding  
 **Topic:** Developer Tools, Artificial Intelligence, Open Source, Productivity  
 
 ### Short Description:
-ContextSkeleton is an open-source CLI and Model Context Protocol (MCP) server that compresses large codebases into syntactically valid code skeletons. Save 70-80% of LLM token costs for Cursor, Claude Code, and Windsurf without losing context.
+ContextSkeleton is an open-source CLI and Model Context Protocol (MCP) server that compresses codebases into syntactically valid code skeletons. Token reduction scales with function size and implementation depth — typically 0% on trivial 1-2 line utility functions (comment-marker overhead exceeds the savings), 45-70% on production-sized modules with substantial function bodies, and up to 90%+ on large, implementation-heavy files. Across our internal benchmark set spanning small, medium, and large files in TypeScript, Python, Go, and Rust, the blended average was 67%.
 
 ---
 
 ## 📄 Hacker News (Show HN) Post
-**Title:** Show HN: ContextSkeleton – Cut LLM token costs by 80% via structural code folding
+**Title:** Show HN: ContextSkeleton – Cut LLM token costs via structural code folding
 
 **Post Body:**
 Hey HN! 
@@ -21,7 +21,7 @@ I built ContextSkeleton because sending raw 1,000-line source files to AI coding
 ContextSkeleton parses JS/TS, Python, Go, and Rust code into structural skeletons—folding function and class implementations while preserving exported signatures, interfaces, imports, and docstrings.
 
 - **0.4ms parsing time** (100% client-side)
-- **70-80% token reduction** verified across real-world repos
+- **67% blended token reduction** (45-70% on production modules, up to 90%+ on large files)
 - **Native MCP Server** integration (`get_repo_skeleton`, `unfold_symbol`)
 - **$0 infra stack** built with zero-dependency Node.js signature pruner
 
@@ -39,7 +39,7 @@ AI coding tools are eating context windows & blowing up LLM API bills 💸
 
 Sending full, unpruned source files to Cursor / Claude Code is a massive token drain.  
 
-Meet ContextSkeleton ⚡ — an open-source tool that cuts code context by 80% with structural code folding.  
+Meet ContextSkeleton ⚡ — an open-source tool that cuts code context with structural code folding (67% blended token savings across full repos).  
 
 🧵 (1/5)
 
@@ -47,7 +47,7 @@ Meet ContextSkeleton ⚡ — an open-source tool that cuts code context by 80% w
 How it works:  
 Instead of dumping 500 lines of implementation into your prompt, ContextSkeleton folds method bodies while preserving exported signatures, interfaces, & JSDocs.  
 
-The AI gets 100% of the architectural blueprint at 1/5th the token cost. (2/5)
+The AI gets 100% of the architectural blueprint at a fraction of the token cost. (2/5)
 
 **Tweet 3:**  
 ⚡ Benchmarks on `@context-skeleton/core`:  

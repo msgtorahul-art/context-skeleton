@@ -212,6 +212,11 @@ function isContainerSignature(trimmed, ext) {
  * Language-aware function/method signature detector
  */
 function isFunctionSignature(trimmed, ext) {
+  // Exclude control-flow statements in all C-style languages
+  if (/^(if|else|for|while|switch|catch|with|try|finally)\b/.test(trimmed)) {
+    return false;
+  }
+
   if (ext === '.go') {
     return /^func\s+/.test(trimmed);
   }
@@ -222,8 +227,8 @@ function isFunctionSignature(trimmed, ext) {
     return /^(public|private|protected|static|final|virtual|override|async|void|int|char|bool|float|double|auto|template|\w+)\s+/.test(trimmed) && trimmed.includes('(');
   }
   // Default JS/TS function detector
-  return /^(export\s+)?(async\s+)?(function|const\s+\w+\s*=\s*(async\s*)?\([^)]*\)\s*=>)/.test(trimmed) ||
-         /^(public|private|protected|static|async|get|set|constructor)?\s*\w+\s*\([^)]*\)\s*(\{|=)/.test(trimmed);
+  return /^(export\s+)?(default\s+)?(async\s+)?(function|class|interface|type|enum|const\s+\w+\s*=\s*(async\s*)?\([^)]*\)\s*=>)/.test(trimmed) ||
+         /^(export\s+)?(default\s+)?(public|private|protected|static|async|get|set)*\s*(async\s+)?(function|constructor|[a-zA-Z_$][a-zA-Z0-9_$]*)\s*(\<[^\>]*\>)?\s*\([^)]*\)\s*(:\s*[^{]+)?\s*\{/.test(trimmed);
 }
 
 /**
