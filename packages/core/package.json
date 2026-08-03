@@ -1,7 +1,7 @@
 {
   "name": "@context-skeleton/core",
   "version": "1.0.0",
-  "description": "Core AST Skeletonizer Engine for code context pruning and token estimation",
+  "description": "Core Structural Skeletonizer Engine for code context pruning and token estimation",
   "type": "module",
   "main": "src/index.js",
   "exports": {
@@ -11,8 +11,8 @@
     "test": "node --test test/index.test.js"
   },
   "keywords": [
-    "ast",
-    "parser",
+    "structural-folding",
+    "code-folding",
     "skeletonizer"
   ],
   "author": "FunctionApp (functionapp.in)",

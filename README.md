@@ -1,11 +1,11 @@
 # ⚡ ContextSkeleton
 
-> **Zero-latency AST Code Folding CLI, Model Context Protocol (MCP) Server & Token Optimizer for AI Agents (Cursor, Claude Code, Windsurf, AGY).**
+> **Zero-latency Structural Code Folding CLI, Model Context Protocol (MCP) Server & Token Optimizer for AI Agents (Cursor, Claude Code, Windsurf, AGY).**
 
 [![ContextSkeleton](https://img.shields.io/badge/%E2%9A%A1_ContextSkeleton-78%25_Tokens_Saved-00f2fe?style=flat-square)](https://github.com/msgtorahul-art/context-skeleton)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-ContextSkeleton parses your codebase into an Abstract Syntax Tree (AST) and folds function and class implementations while preserving top-level signatures, interface definitions, exported types, and docstrings.
+ContextSkeleton folds function and class implementations while preserving top-level signatures, interface definitions, exported types, and docstrings across JavaScript, TypeScript, Python, Go, and C-style languages.
 
 It reduces LLM context window costs and context rot by **70% to 80%** without losing architectural coherence.
 
@@ -51,7 +51,7 @@ Add to your `claude_desktop_config.json` or `.cursorrules`:
 ```
 
 ### Exposed MCP Tools:
-- `get_repo_skeleton`: Returns AST folded skeleton of target repository.
+- `get_repo_skeleton`: Returns folded structural skeleton of target repository.
 - `unfold_symbol`: Retrieves exact implementation of a specific function or class on demand.
 - `get_token_savings`: Returns exact token & prompt cost savings metrics.
 
@@ -70,9 +70,9 @@ Add to your `claude_desktop_config.json` or `.cursorrules`:
 
 ## 💻 Tech Stack ($0 Infra Cost)
 
-- **Engine:** Node.js / TypeScript AST Structural Pruner & Token Counter
+- **Engine:** Zero-dependency Node.js Structural Signature Pruner & Token Counter
 - **MCP Server:** Stdio JSON-RPC 2.0
-- **Web App:** Vite + HTML5 + CSS Glassmorphism
+- **Web App:** Single-Source HTML5 + Modern CSS + Pure JS
 
 ---
 

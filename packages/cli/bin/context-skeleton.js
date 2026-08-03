@@ -15,7 +15,7 @@ function printHeader() {
   console.log(`
 \x1b[36m┌─────────────────────────────────────────────────────────────┐\x1b[0m
 \x1b[36m│\x1b[0m  \x1b[1m⚡ ContextSkeleton CLI v1.0.0\x1b[0m                               \x1b[36m│\x1b[0m
-\x1b[36m│\x1b[0m  \x1b[90mAST Code Skeletonizer & LLM Token Optimizer\x1b[0m               \x1b[36m│\x1b[0m
+\x1b[36m│\x1b[0m  \x1b[90mStructural Code Skeletonizer & LLM Token Optimizer\x1b[0m       \x1b[36m│\x1b[0m
 \x1b[36m└─────────────────────────────────────────────────────────────┘\x1b[0m
   `);
 }
@@ -27,10 +27,10 @@ function printHelp() {
   $ npx context-skeleton [command] [options]
 
 \x1b[1mCOMMANDS:\x1b[0m
-  \x1b[32mscan [dir]\x1b[0m     Scan directory, compress code context, and display metrics summary (default: .)
-  \x1b[32mcopy [dir]\x1b[0m     Generate AST skeleton context to stdout for AI prompts (Cursor/Claude/Windsurf)
-  \x1b[32mbadge\x1b[0m          Generate PR / README / .cursorrules token-savings badge snippet
-  \x1b[32mhelp\x1b[0m           Show help menu
+  \x1b[32mscan [dir]\x1b[0m       Scan directory, compress code context, and display metrics summary (default: .)
+  \x1b[32mcopy [dir]\x1b[0m       Generate structural skeleton context to stdout for AI prompts (Cursor/Claude/Windsurf)
+  \x1b[32mbadge\x1b[0m            Generate PR / README / .cursorrules token-savings badge snippet
+  \x1b[32mhelp\x1b[0m             Show help menu
 
 \x1b[1mOPTIONS:\x1b[0m
   \x1b[33m--out <file>\x1b[0m   Save compressed skeleton markdown output to file

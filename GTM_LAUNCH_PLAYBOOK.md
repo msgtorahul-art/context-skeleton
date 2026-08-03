@@ -2,7 +2,7 @@
 
 ## 🚀 Product Hunt Launch Title & Tagline
 **Product Name:** ContextSkeleton  
-**Tagline:** Cut LLM context costs by 80% with zero-latency AST code folding  
+**Tagline:** Cut LLM context costs by 80% with zero-latency structural code folding  
 **Topic:** Developer Tools, Artificial Intelligence, Open Source, Productivity  
 
 ### Short Description:
@@ -11,22 +11,22 @@ ContextSkeleton is an open-source CLI and Model Context Protocol (MCP) server th
 ---
 
 ## 📄 Hacker News (Show HN) Post
-**Title:** Show HN: ContextSkeleton – Cut LLM token costs by 80% via AST code folding
+**Title:** Show HN: ContextSkeleton – Cut LLM token costs by 80% via structural code folding
 
 **Post Body:**
 Hey HN! 
 
 I built ContextSkeleton because sending raw 1,000-line source files to AI coding agents (Cursor, Claude Code, Windsurf) was blowing through token limits and inflating API bills.
 
-ContextSkeleton parses JS/TS, Python, Go, and Rust code into AST skeletons—folding function and class implementations while preserving exported signatures, interfaces, imports, and docstrings.
+ContextSkeleton parses JS/TS, Python, Go, and Rust code into structural skeletons—folding function and class implementations while preserving exported signatures, interfaces, imports, and docstrings.
 
 - **0.4ms parsing time** (100% client-side)
 - **70-80% token reduction** verified across real-world repos
 - **Native MCP Server** integration (`get_repo_skeleton`, `unfold_symbol`)
-- **$0 infra stack** built with Node.js & Tree-Sitter parsing
+- **$0 infra stack** built with zero-dependency Node.js signature pruner
 
 CLI: `npx context-skeleton scan`  
-GitHub: https://github.com/context-skeleton/context-skeleton  
+GitHub: https://github.com/msgtorahul-art/context-skeleton  
 
 Would love feedback from engineers using AI agents in production!
 
@@ -39,7 +39,7 @@ AI coding tools are eating context windows & blowing up LLM API bills 💸
 
 Sending full, unpruned source files to Cursor / Claude Code is a massive token drain.  
 
-Meet ContextSkeleton ⚡ — an open-source tool that cuts code context by 80% with AST folding.  
+Meet ContextSkeleton ⚡ — an open-source tool that cuts code context by 80% with structural code folding.  
 
 🧵 (1/5)
 
@@ -70,4 +70,4 @@ Try it right now in your terminal:
 `npx context-skeleton scan`  
 
 Star on GitHub & start saving token costs today 👇  
-https://github.com/context-skeleton/context-skeleton (5/5)
+https://github.com/msgtorahul-art/context-skeleton (5/5)

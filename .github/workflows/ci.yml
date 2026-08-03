@@ -17,5 +17,5 @@ jobs:
           node-version: '20'
       - name: Run Core Unit Tests
         run: npm test
-      - name: Verify CLI Command
+      - name: Verify CLI Scan Command
         run: node packages/cli/bin/context-skeleton.js scan packages/core

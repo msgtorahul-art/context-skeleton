@@ -21,10 +21,10 @@
   <p><strong>Published by FunctionApp</strong> (<a href="https://functionapp.in" target="_blank">functionapp.in</a>)</p>
 
   <h2>1. Local Air-Gapped Code Processing</h2>
-  <p>Security is fundamental to ContextSkeleton. All code parsing, AST folding, and token estimation execute locally within your local Node.js process. At no point does the CLI or MCP server make outbound HTTP connections or upload source code snippets to external servers.</p>
+  <p>Security is fundamental to ContextSkeleton. All code parsing, structural folding, and token estimation execute locally within your local Node.js process. At no point does the CLI or MCP server make outbound HTTP connections or upload source code snippets to external servers.</p>
 
   <h2>2. Secret & API Key Protection</h2>
-  <p>When ContextSkeleton parses function implementations, secrets, credentials, or environment variables contained within function bodies are automatically stripped during implementation folding, reducing risk when sharing skeletons with AI model endpoints.</p>
+  <p>Secrets inside folded function bodies are not included in the output skeleton; secrets in top-level constants or module scope are not currently filtered and should not be hardcoded in source code.</p>
 
   <h2>3. Reporting Security Vulnerabilities</h2>
   <p>If you discover a security vulnerability in ContextSkeleton or FunctionApp products, please report it via our platform at <a href="https://functionapp.in" target="_blank">functionapp.in</a> or create a GitHub issue on our repository.</p>

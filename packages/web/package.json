@@ -1,21 +1,18 @@
 {
   "name": "@context-skeleton/web",
   "version": "1.0.0",
-  "description": "Interactive Web Visualizer and Product Landing Page for ContextSkeleton",
+  "description": "Zero-dependency local HTTP preview server for ContextSkeleton site",
   "type": "module",
+  "main": "server.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^5.0.0"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "keywords": [
     "web",
     "playground",
-    "landing-page"
+    "dev-server"
   ],
-  "author": "Antigravity CEO",
+  "author": "FunctionApp (functionapp.in)",
   "license": "MIT"
 }

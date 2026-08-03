@@ -31,7 +31,7 @@ Every time a developer or AI agent runs `npx context-skeleton badge` or pushes a
 We launch on 100% free developer channels:
 1. **Show HN (Hacker News)**: Direct technical post targeting developers hitting Claude/Cursor token rate limits.
 2. **Reddit Community Pitch**: Post benchmarks on `/r/LocalLLaMA`, `/r/programming`, and `/r/ChatGPTCoding`.
-3. **Dev.to & Hashnode Articles**: Deep-dive technical post: *"How we cut LLM prompt costs by 80% using Tree-Sitter AST folding"*.
+3. **Dev.to & Hashnode Articles**: Deep-dive technical post: *"How we cut LLM prompt costs by 80% using structural signature code folding"*.
 
 ### Step 3: Zero-Cost Infrastructure Architecture
 - **Web & Landing Page**: Hosted on **Cloudflare Pages / GitHub Pages** ($0/month).
