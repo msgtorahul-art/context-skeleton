@@ -644,16 +644,16 @@
 
         <div class="contact-form-box">
           <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;">Contact Sales & Support</h3>
-          <form onsubmit="alert('Thank you! Your message has been received by FunctionApp team. We will get back to you shortly.'); return false;">
+          <form onsubmit="return handleEnterpriseSubmit(event)">
             <div class="form-group">
               <label>Work Email</label>
-              <input type="email" class="form-input" placeholder="name@company.com" required>
+              <input type="email" id="workEmail" class="form-input" placeholder="name@company.com" required>
             </div>
             <div class="form-group">
               <label>Organization / Team Size</label>
-              <input type="text" class="form-input" placeholder="e.g. 10 engineers" required>
+              <input type="text" id="teamSize" class="form-input" placeholder="e.g. 10 engineers" required>
             </div>
-            <button type="submit" class="btn-submit">Submit Inquiry</button>
+            <button type="submit" class="btn-submit">Submit Inquiry via Email</button>
           </form>
         </div>
       </div>
@@ -770,6 +770,16 @@ export function UserDashboard({ userId }: { userId: string }) {
 
   return <div className="dashboard">Welcome, {user?.name}</div>;
 }`;
+
+    window.handleEnterpriseSubmit = function(e) {
+      if (e) e.preventDefault();
+      const email = document.getElementById('workEmail')?.value || '';
+      const size = document.getElementById('teamSize')?.value || '';
+      const subject = encodeURIComponent('Enterprise Inquiry: ContextSkeleton');
+      const body = encodeURIComponent(`Hi FunctionApp Team,\n\nI am interested in enterprise solutions for ContextSkeleton.\n\nWork Email: ${email}\nOrganization / Team Size: ${size}\n\nThanks!`);
+      window.location.href = `mailto:contact@functionapp.in?subject=${subject}&body=${body}`;
+      return false;
+    };
 
     document.addEventListener('DOMContentLoaded', () => {
       const input = document.getElementById('codeInput');
