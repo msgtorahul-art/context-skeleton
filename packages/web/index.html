@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ContextSkeleton — The AST Code Skeletonizer for AI Agents</title>
+  <title>ContextSkeleton — The #1 AST Code Skeletonizer & LLM Cost Optimizer</title>
   <meta name="description" content="Give AI agents lightweight, syntactically valid code skeletons. Cut LLM token costs by 80% with zero latency for Claude Code, Cursor, Windsurf, and AGY.">
   
   <!-- OpenGraph / Social Media SEO -->
@@ -16,19 +16,766 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./src/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-paper: #0b0f19;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --border-color: rgba(255, 255, 255, 0.12);
+      --border-grid: rgba(255, 255, 255, 0.08);
+      --brand-blue: #0070f3;
+      --brand-cyan: #00f2fe;
+      --brand-purple: #7f00ff;
+      --text-main: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --success-green: #00e676;
+      --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* BACKGROUND CANVAS & GRID SPOTLIGHT */
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-grid-pattern {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .border-grid {
+      border-left: 1px solid var(--border-grid);
+      border-right: 1px solid var(--border-grid);
+      border-bottom: 1px solid var(--border-grid);
+    }
+
+    /* TOP ANNOUNCEMENT BAR */
+    .top-announcement-bar {
+      background: linear-gradient(90deg, var(--brand-purple), var(--brand-blue));
+      color: #fff;
+      padding: 0.5rem 0;
+      font-size: 0.85rem;
+      font-weight: 500;
+      position: relative;
+      z-index: 101;
+    }
+
+    .announcement-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .announcement-link {
+      color: #fff;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      background: rgba(7, 9, 14, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 0;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 800;
+      font-size: 1.35rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .logo-icon {
+      background: linear-gradient(135deg, var(--brand-cyan), var(--brand-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.5rem;
+    }
+
+    .badge-tag {
+      font-size: 0.75rem;
+      background: rgba(0, 242, 254, 0.12);
+      color: var(--brand-cyan);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      font-family: var(--font-code);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover { color: var(--brand-cyan); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-github {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 1rem;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.04);
+      transition: all 0.2s ease;
+    }
+
+    .btn-github:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--brand-cyan);
+    }
+
+    .btn-pinecone-primary {
+      background: var(--brand-blue);
+      color: #fff;
+      padding: 0.45rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid var(--brand-blue);
+      box-shadow: 0 4px 16px rgba(0, 112, 243, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-pinecone-primary:hover {
+      background: #005bb5;
+      box-shadow: 0 6px 24px rgba(0, 112, 243, 0.5);
+    }
+
+    /* HERO SECTION */
+    .hero-section {
+      padding: 6rem 0 4rem;
+    }
+
+    .hero-content {
+      padding: 3rem 2rem;
+      max-width: 900px;
+    }
+
+    .section-tag {
+      color: var(--brand-cyan);
+      font-family: var(--font-code);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .hero-headline {
+      font-size: 4.2rem;
+      font-weight: 900;
+      line-height: 1.05;
+      margin: 1.2rem 0;
+      letter-spacing: -1.8px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--brand-cyan) 0%, var(--brand-blue) 50%, var(--brand-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtext {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.8rem;
+      max-width: 780px;
+    }
+
+    /* PINECONE CORNER CROSSHAIR BUTTONS */
+    .hero-btn-group {
+      display: flex;
+      gap: 1.4rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-crosshair-primary, .btn-crosshair-secondary {
+      position: relative;
+      display: inline-block;
+      padding: 0.9rem 2rem;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-crosshair-primary {
+      background: var(--brand-blue);
+      color: #fff;
+      border: 1px solid var(--brand-blue);
+    }
+
+    .btn-crosshair-primary:hover {
+      background: #005bb5;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 112, 243, 0.4);
+    }
+
+    .btn-crosshair-secondary {
+      background: var(--bg-paper);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-crosshair-secondary:hover {
+      border-color: var(--brand-cyan);
+      color: var(--brand-cyan);
+    }
+
+    .corner-crosshairs {
+      position: absolute;
+      inset: -4px;
+      pointer-events: none;
+    }
+
+    .corner-crosshairs::before, .corner-crosshairs::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 1.5px solid var(--brand-cyan);
+    }
+
+    .corner-crosshairs::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+    .corner-crosshairs::after { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+    /* TOOLCHAIN INTEGRATION TABS */
+    .integration-section { padding: 4rem 0 2rem; }
+    .integration-header { padding: 2rem 2rem 1rem; }
+
+    .toolchain-tabs {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .tool-tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-family: var(--font-code);
+      font-size: 0.95rem;
+      padding: 0.5rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tool-tab.active, .tool-tab:hover {
+      color: var(--brand-cyan);
+      border-bottom-color: var(--brand-cyan);
+    }
+
+    .terminal-command-card {
+      background: var(--bg-paper);
+      border: 1px solid var(--border-color);
+      padding: 1.4rem 2.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-code);
+      font-size: 1.1rem;
+      margin: 0 2rem 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .prompt-symbol {
+      color: var(--brand-blue);
+      margin-right: 0.8rem;
+      font-weight: 700;
+    }
+
+    .btn-copy-terminal {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy-terminal:hover {
+      color: var(--brand-cyan);
+      border-color: var(--brand-cyan);
+    }
+
+    /* CONSOLE PEEK PANEL */
+    .console-peek-section { padding: 4rem 0; }
+    .section-title-box { padding: 2rem 2rem 1.5rem; }
+    .section-title-box h2 { font-size: 2.4rem; font-weight: 800; }
+    .section-title-box p { color: var(--text-secondary); margin-top: 0.5rem; font-size: 1.05rem; }
+
+    .pinecone-console-card {
+      margin: 1.5rem 2rem 3rem;
+      background: var(--bg-paper);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .console-top-bar {
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.8rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .url-pill {
+      font-family: var(--font-code);
+      color: var(--brand-cyan);
+      background: rgba(0, 242, 254, 0.1);
+      padding: 0.25rem 0.7rem;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+    }
+
+    .status-indicator {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .green-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--success-green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--success-green);
+    }
+
+    .console-body {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 320px;
+    }
+
+    .console-sidebar {
+      background: rgba(0, 0, 0, 0.25);
+      border-right: 1px solid var(--border-color);
+      padding: 1.2rem 0;
+    }
+
+    .nav-group-title {
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding: 0.5rem 1.4rem;
+      letter-spacing: 1px;
+    }
+
+    .console-nav-item {
+      padding: 0.6rem 1.4rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .console-nav-item.active {
+      background: rgba(0, 112, 243, 0.12);
+      color: var(--brand-cyan);
+      border-left: 3px solid var(--brand-blue);
+      font-weight: 600;
+    }
+
+    .console-main-panel { padding: 1.2rem 1.8rem; }
+
+    .console-table-head {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .console-table-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      font-size: 0.9rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      align-items: center;
+    }
+
+    .filename-cell {
+      font-family: var(--font-code);
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .mono-cell {
+      font-family: var(--font-code);
+      color: var(--text-secondary);
+    }
+
+    .mono-cell.cyan { color: var(--brand-cyan); font-weight: 600; }
+
+    .badge-green {
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      color: var(--success-green);
+      background: rgba(0, 230, 118, 0.12);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      width: fit-content;
+      font-weight: 700;
+    }
+
+    .status-ready {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dot-small {
+      width: 6px;
+      height: 6px;
+      background: var(--success-green);
+      border-radius: 50%;
+    }
+
+    /* PLAYGROUND SECTION */
+    .playground-section { padding: 4rem 0; }
+    .language-tabs-row { padding: 0 2rem 1.2rem; display: flex; gap: 0.6rem; }
+
+    .tab-btn {
+      background: var(--bg-paper);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.6rem 1.4rem;
+      font-family: var(--font-main);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--brand-blue);
+      color: #fff;
+      border-color: var(--brand-blue);
+    }
+
+    .editor-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+      padding: 0 2rem;
+    }
+
+    .editor-pane {
+      background: var(--bg-paper);
+      border: 1px solid var(--border-color);
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .editor-header {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.9rem 1.4rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .badge-tokens {
+      font-family: var(--font-code);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .badge-success { color: var(--success-green); }
+
+    .code-textarea {
+      width: 100%;
+      height: 400px;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-family: var(--font-code);
+      font-size: 0.88rem;
+      padding: 1.4rem;
+      resize: none;
+      outline: none;
+      line-height: 1.6;
+    }
+
+    .readonly-textarea { color: var(--brand-cyan); background: rgba(0, 0, 0, 0.3); }
+
+    .editor-overlay-actions { position: absolute; bottom: 1.2rem; right: 1.2rem; }
+
+    .btn-copy-skeleton {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--brand-blue);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0, 112, 243, 0.3);
+    }
+
+    .savings-card-bar {
+      margin: 1.8rem 2rem 0;
+      background: var(--bg-paper);
+      border: 1px solid var(--border-color);
+      padding: 1.4rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+    }
+
+    .savings-amount { font-weight: 800; color: var(--success-green); font-size: 1.1rem; }
+
+    .badge-snippet-box code {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+    }
+
+    .btn-sm {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* PRICING SECTION */
+    .pricing-section { padding: 5rem 0; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.8rem;
+      padding: 2rem;
+    }
+
+    .pricing-card {
+      background: var(--bg-paper);
+      border: 1px solid var(--border-color);
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border-color: var(--brand-blue);
+      box-shadow: 0 12px 48px rgba(0, 112, 243, 0.2);
+    }
+
+    .popular-tag {
+      position: absolute;
+      top: -14px;
+      right: 24px;
+      background: var(--brand-blue);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.25rem 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    .plan-name { font-size: 1.5rem; font-weight: 800; }
+    .plan-price { font-size: 2.8rem; font-weight: 900; margin: 1rem 0; }
+    .plan-price span { font-size: 0.95rem; color: var(--text-muted); font-weight: 400; }
+    .plan-desc { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.8rem; }
+
+    .plan-features { list-style: none; margin-bottom: 2.2rem; flex-grow: 1; }
+    .plan-features li { font-size: 0.95rem; margin-bottom: 0.7rem; color: var(--text-secondary); }
+
+    .btn-plan-outline, .btn-plan-primary {
+      width: 100%;
+      padding: 0.9rem;
+      text-align: center;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: block;
+      border: none;
+    }
+
+    .btn-plan-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    .btn-plan-primary {
+      background: var(--brand-blue);
+      color: #fff;
+      border: 1px solid var(--brand-blue);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px);
+      z-index: 200;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.hidden { display: none; }
+
+    .modal-card {
+      background: var(--bg-paper);
+      border: 1px solid var(--brand-blue);
+      padding: 2.5rem;
+      max-width: 460px;
+      width: 100%;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+
+    .modal-badge { font-size: 0.75rem; font-weight: 800; color: var(--brand-blue); letter-spacing: 1px; }
+    .modal-price { font-size: 2rem; font-weight: 900; color: var(--success-green); margin: 0.6rem 0 1.2rem; }
+
+    .btn-payment {
+      width: 100%;
+      padding: 1rem;
+      background: var(--brand-blue);
+      color: #fff;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      margin-top: 1.2rem;
+    }
+
+    .guarantee-note { font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: 1.2rem; }
+
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      border-top: 1px solid var(--border-grid);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-links a { color: var(--text-muted); text-decoration: none; margin: 0 0.6rem; }
+    .footer-links a:hover { color: var(--brand-cyan); }
+  </style>
 </head>
 <body>
-  <!-- PINECONE-STYLE TOP ANNOUNCEMENT BAR -->
+  <!-- BACKGROUND ANIMATED CANVAS -->
+  <canvas id="bgCanvas"></canvas>
+  <div class="bg-grid-pattern"></div>
+
+  <!-- PINECONE TOP ANNOUNCEMENT BAR -->
   <div class="top-announcement-bar">
-    <div class="container flex-between">
-      <span>🚀 <strong>ContextSkeleton v1.0.0 is Live</strong> — Cut AI Agent Token Costs by 80%</span>
+    <div class="container announcement-inner">
+      <span>🚀 <strong>ContextSkeleton v1.0.0 Live</strong> — Cut AI Agent Token Costs by 80%</span>
       <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="announcement-link">Read Announcement →</a>
     </div>
   </div>
 
-  <!-- NAVIGATION HEADER -->
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-container">
       <a href="#" class="logo">
@@ -40,8 +787,8 @@
       <nav class="nav-links">
         <a href="#integration">Integrations</a>
         <a href="#console">Console Peek</a>
+        <a href="#playground">Playground</a>
         <a href="#pricing">Pricing</a>
-        <a href="#docs">Docs</a>
       </nav>
 
       <div class="nav-actions">
@@ -49,18 +796,18 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
           GitHub ★
         </a>
-        <a href="https://app.contextskeleton.com" class="btn-pinecone-primary">Start Building</a>
+        <a href="#pricing" class="btn-pinecone-primary">Start Building</a>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- HERO SECTION (PINECONE DESIGN SYSTEM) -->
+    <!-- HERO SECTION -->
     <section class="hero-section">
       <div class="container border-grid">
         <div class="hero-content">
           <span class="section-tag">BUILD KNOWLEDGEABLE AI AGENTS</span>
-          <h1 class="hero-headline">Give agents <span class="brand-blue">knowledge</span>, not tokens.</h1>
+          <h1 class="hero-headline">Give agents <span class="gradient-text">knowledge</span>, not tokens.</h1>
           <p class="hero-subtext">Fast AST retrieval. Accurate results. 80% lower token costs. Start in seconds.</p>
           
           <div class="hero-btn-group">
@@ -77,11 +824,11 @@
       </div>
     </section>
 
-    <!-- PINECONE-STYLE AI TOOLCHAIN INTEGRATION BAR -->
+    <!-- INTEGRATION TAB BAR -->
     <section id="integration" class="integration-section">
       <div class="container border-grid">
         <div class="integration-header">
-          <span class="section-tag-sm">GET STARTED</span>
+          <span class="section-tag-sm">GET STARTED WITH YOUR TOOLCHAIN</span>
           <div class="toolchain-tabs">
             <button class="tool-tab active" data-tool="claude">{Claude Code}</button>
             <button class="tool-tab" data-tool="cursor">{Cursor AI}</button>
@@ -93,19 +840,16 @@
         </div>
 
         <div class="terminal-command-card">
-          <code class="terminal-code">
+          <code>
             <span class="prompt-symbol">$</span>
-            <span id="commandSnippetText">npx context-skeleton scan</span>
+            <span id="commandSnippetText">claude plugin install context-skeleton</span>
           </code>
-          <button id="btnCopyTerminal" class="btn-copy-terminal">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy
-          </button>
+          <button id="btnCopyTerminal" class="btn-copy-terminal">Copy</button>
         </div>
       </div>
     </section>
 
-    <!-- LIVE CONSOLE PEEK PANEL (PINECONE-STYLE DASHBOARD CONSOLE) -->
+    <!-- CONSOLE PEEK PANEL -->
     <section id="console" class="console-peek-section">
       <div class="container border-grid">
         <div class="section-title-box">
@@ -120,7 +864,6 @@
           </div>
 
           <div class="console-body">
-            <!-- SIDEBAR -->
             <div class="console-sidebar">
               <div class="nav-group-title">WORKSPACE</div>
               <div class="console-nav-item active">📁 @context-skeleton/core</div>
@@ -132,7 +875,6 @@
               <div class="console-nav-item">📊 get_token_savings</div>
             </div>
 
-            <!-- MAIN PANEL -->
             <div class="console-main-panel">
               <div class="console-table-head">
                 <span>FILE / SYMBOL</span>
@@ -184,7 +926,6 @@
         </div>
 
         <div class="editor-container">
-          <!-- INPUT CODE EDITOR -->
           <div class="editor-pane">
             <div class="editor-header">
               <span>INPUT SOURCE CODE</span>
@@ -193,7 +934,6 @@
             <textarea id="codeInput" class="code-textarea" spellcheck="false" placeholder="Paste code here..."></textarea>
           </div>
 
-          <!-- SKELETON OUTPUT EDITOR -->
           <div class="editor-pane">
             <div class="editor-header">
               <span>SKELETONIZED AST CONTEXT</span>
@@ -201,22 +941,18 @@
             </div>
             <textarea id="codeOutput" class="code-textarea readonly-textarea" readonly spellcheck="false"></textarea>
             <div class="editor-overlay-actions">
-              <button id="btnCopySkeleton" class="btn-copy-skeleton">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                Copy Context
-              </button>
+              <button id="btnCopySkeleton" class="btn-copy-skeleton">Copy Context</button>
             </div>
           </div>
         </div>
 
-        <!-- SAVINGS METRICS BAR -->
         <div class="savings-card-bar">
           <div class="savings-info">
-            <span class="savings-title">Prompt Cost Saved:</span>
+            <span>Prompt Cost Saved:</span>
             <span id="liveDollarSavings" class="savings-amount">$0.0008 / prompt</span>
           </div>
           <div class="badge-snippet-box">
-            <span class="badge-label">PR & .cursorrules Badge:</span>
+            <span>PR & .cursorrules Badge:</span>
             <code id="badgeSnippet">⚡ Context optimized by ContextSkeleton (Saved 78.4% tokens)</code>
             <button id="btnCopyBadge" class="btn-sm">Copy Badge</button>
           </div>
@@ -234,7 +970,6 @@
         </div>
 
         <div class="pricing-grid">
-          <!-- FREE -->
           <div class="pricing-card">
             <div class="plan-name">Open Source</div>
             <div class="plan-price">$0 <span>/ month</span></div>
@@ -248,7 +983,6 @@
             <a href="https://github.com/msgtorahul-art/context-skeleton" target="_blank" class="btn-plan-outline">Install Open Source</a>
           </div>
 
-          <!-- PRO -->
           <div class="pricing-card featured">
             <div class="popular-tag">MOST POPULAR</div>
             <div class="plan-name">Pro Developer</div>
@@ -264,7 +998,6 @@
             <button class="btn-plan-primary btn-checkout" data-plan="pro">Upgrade to Pro ($12/mo)</button>
           </div>
 
-          <!-- TEAM -->
           <div class="pricing-card">
             <div class="plan-name">Team & Enterprise</div>
             <div class="plan-price">$49 <span>/ seat / month</span></div>
@@ -305,7 +1038,7 @@
   </main>
 
   <footer>
-    <div class="container footer-container">
+    <div class="container">
       <div class="footer-links">
         <a href="./privacy.html">Privacy Policy</a> • 
         <a href="./terms.html">Terms of Service</a> • 
@@ -315,6 +1048,321 @@
     </div>
   </footer>
 
-  <script type="module" src="./src/main.js"></script>
+  <!-- EMBEDDED BROWSER SKELETONIZER & INTERACTIVE ENGINE -->
+  <script>
+    // BROWSER-SAFE AST SKELETONIZER ENGINE (ZERO NODE DEPENDENCIES)
+    function estimateTokens(text) {
+      if (!text) return 0;
+      const charCount = text.length;
+      const wordCount = (text.match(/\w+/g) || []).length;
+      const symbolCount = (text.match(/[{}[\]();:=><+\-*\/&|!.,?]/g) || []).length;
+      return Math.ceil((wordCount * 0.75) + (symbolCount * 0.4) + (charCount * 0.05));
+    }
+
+    function calculateSavings(originalTokens, skeletonTokens, costPerMillion = 3.00) {
+      const tokensSaved = Math.max(0, originalTokens - skeletonTokens);
+      const percentageSaved = originalTokens > 0 ? ((tokensSaved / originalTokens) * 100).toFixed(1) : 0;
+      const dollarsSaved = ((tokensSaved / 1000000) * costPerMillion).toFixed(4);
+      return { originalTokens, skeletonTokens, tokensSaved, percentageSaved: Number(percentageSaved), dollarsSaved: Number(dollarsSaved) };
+    }
+
+    function skeletonizeCode(code, lang) {
+      const lines = code.split('\n');
+      const result = [];
+      let inFunction = false;
+      let blockDepth = 0;
+      let foldContentLines = 0;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
+        const openBraces = (line.match(/\{/g) || []).length;
+        const closeBraces = (line.match(/\}/g) || []).length;
+
+        if (inFunction) {
+          blockDepth += (openBraces - closeBraces);
+          if (blockDepth <= 0) {
+            inFunction = false;
+            if (foldContentLines > 0) {
+              result.push(`  /* ... [folded implementation: ${foldContentLines} lines] ... */`);
+            }
+            result.push('}');
+          } else {
+            foldContentLines++;
+          }
+          continue;
+        }
+
+        const isSignature = /^(export\s+)?(async\s+)?(function|class|interface|type|enum|const\s+\w+\s*=\s*(async\s*)?\([^)]*\)\s*=>)/.test(trimmed) ||
+                            /^(public|private|protected|static|async|get|set)?\s*\w+\s*\([^)]*\)\s*(\{|=)/.test(trimmed);
+
+        if (isSignature && line.includes('{')) {
+          inFunction = true;
+          blockDepth = Math.max(1, openBraces - closeBraces);
+          foldContentLines = 0;
+
+          const braceIndex = line.lastIndexOf('{');
+          if (braceIndex !== -1) {
+            result.push(line.substring(0, braceIndex + 1));
+          } else {
+            result.push(line);
+          }
+          continue;
+        }
+
+        result.push(line);
+      }
+
+      const skeletonCode = result.join('\n');
+      const originalTokens = estimateTokens(code);
+      const skeletonTokens = estimateTokens(skeletonCode);
+      const metrics = calculateSavings(originalTokens, skeletonTokens);
+
+      return { skeletonCode, metrics };
+    }
+
+    // SAMPLES
+    const SAMPLES = {
+      ts: `import { useState, useEffect } from 'react';
+import { fetchUserData, updateProfile } from './api';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user' | 'guest';
+}
+
+export function UserDashboard({ userId }: { userId: string }) {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const data = await fetchUserData(userId);
+        setUser(data);
+      } catch (err) {
+        console.error('Failed to load profile:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, [userId]);
+
+  const handleSave = async (updatedName: string) => {
+    if (!user) return;
+    setLoading(true);
+    const res = await updateProfile(user.id, { name: updatedName });
+    setUser(res);
+    setLoading(false);
+  };
+
+  return (
+    <div className="dashboard-container">
+      <h2>Welcome, {user?.name}</h2>
+    </div>
+  );
+}
+
+export class AnalyticsTracker {
+  private apiKey: string;
+  constructor(key: string) {
+    this.apiKey = key;
+  }
+
+  public trackEvent(eventName: string, payload: Record<string, any>) {
+    const body = JSON.stringify({ event: eventName, payload, key: this.apiKey });
+    fetch('https://analytics.internal/event', { method: 'POST', body });
+    return true;
+  }
+}`,
+      py: `import time
+import requests
+
+class ModelInferenceEngine:
+    """Manages local model weights and execution pipeline"""
+    def __init__(self, model_name: str, cache_dir: str = "/tmp/models"):
+        self.model_name = model_name
+        self.cache_dir = cache_dir
+        self._initialize_weights()
+
+    def _initialize_weights(self):
+        print(f"Loading weights for {self.model_name}...")
+        time.sleep(0.5)
+        self.ready = True
+
+    def predict(self, prompt: str, max_tokens: int = 512) -> str:
+        if not self.ready:
+            raise RuntimeError("Engine not ready")
+        
+        payload = {"prompt": prompt, "tokens": max_tokens}
+        res = requests.post("http://localhost:8080/v1/completions", json=payload)
+        data = res.json()
+        return data.get("text", "")
+
+def calculate_confidence_score(predictions: list) -> float:
+    total = sum(p["score"] for p in predictions)
+    return total / len(predictions) if predictions else 0.0`,
+      go: `package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+type Customer struct {
+	ID    string \`json:"id"\`
+	Name  string \`json:"name"\`
+	Email string \`json:"email"\`
+}
+
+func ProcessTransaction(w http.ResponseWriter, r *http.Request) {
+	var cust Customer
+	if err := json.NewDecoder(r.Body).Decode(&cust); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	
+	fmt.Printf("Processing tx for customer: %s\\n", cust.Name)
+	w.WriteHeader(http.StatusOK)
+}`
+    };
+
+    // DOM BINDINGS
+    document.addEventListener('DOMContentLoaded', () => {
+      const codeInput = document.getElementById('codeInput');
+      const codeOutput = document.getElementById('codeOutput');
+      const inputTokenCount = document.getElementById('inputTokenCount');
+      const outputTokenCount = document.getElementById('outputTokenCount');
+      const liveDollarSavings = document.getElementById('liveDollarSavings');
+      const badgeSnippet = document.getElementById('badgeSnippet');
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const toolTabs = document.querySelectorAll('.tool-tab');
+      const commandSnippetText = document.getElementById('commandSnippetText');
+
+      let currentLang = 'ts';
+
+      function updateSkeleton() {
+        if (!codeInput || !codeOutput) return;
+        const code = codeInput.value;
+        const res = skeletonizeCode(code, currentLang);
+        
+        codeOutput.value = res.skeletonCode;
+        inputTokenCount.textContent = `Original: ${res.metrics.originalTokens} tokens`;
+        outputTokenCount.textContent = `Skeleton: ${res.metrics.skeletonTokens} tokens (-${res.metrics.percentageSaved}%)`;
+        liveDollarSavings.textContent = `$${res.metrics.dollarsSaved} / prompt`;
+        badgeSnippet.textContent = `⚡ Context optimized by ContextSkeleton (Saved ${res.metrics.percentageSaved}% tokens)`;
+      }
+
+      if (codeInput) {
+        codeInput.value = SAMPLES.ts;
+        updateSkeleton();
+        codeInput.addEventListener('input', updateSkeleton);
+      }
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentLang = btn.dataset.lang;
+          codeInput.value = SAMPLES[currentLang] || '';
+          updateSkeleton();
+        });
+      });
+
+      toolTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          toolTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const tool = tab.dataset.tool;
+          if (tool === 'claude') commandSnippetText.textContent = 'claude plugin install context-skeleton';
+          else if (tool === 'cursor') commandSnippetText.textContent = 'npx context-skeleton scan';
+          else if (tool === 'windsurf') commandSnippetText.textContent = 'npx @context-skeleton/mcp-server';
+          else if (tool === 'vscode') commandSnippetText.textContent = 'code --install-extension context-skeleton';
+          else if (tool === 'cli') commandSnippetText.textContent = 'npx context-skeleton scan';
+          else if (tool === 'mcp') commandSnippetText.textContent = 'npx -y @context-skeleton/mcp-server';
+        });
+      });
+
+      // COPY BUTTONS
+      document.getElementById('btnCopyTerminal')?.addEventListener('click', () => {
+        navigator.clipboard.writeText(commandSnippetText.textContent);
+        const btn = document.getElementById('btnCopyTerminal');
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+
+      document.getElementById('btnCopySkeleton')?.addEventListener('click', () => {
+        navigator.clipboard.writeText(codeOutput.value);
+        const btn = document.getElementById('btnCopySkeleton');
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => { btn.textContent = 'Copy Context'; }, 2000);
+      });
+
+      document.getElementById('btnCopyBadge')?.addEventListener('click', () => {
+        navigator.clipboard.writeText(badgeSnippet.textContent);
+        const btn = document.getElementById('btnCopyBadge');
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy Badge'; }, 2000);
+      });
+
+      // MODAL HANDLERS
+      const checkoutModal = document.getElementById('checkoutModal');
+      const closeModal = document.getElementById('closeModal');
+      const checkoutBtns = document.querySelectorAll('.btn-checkout');
+
+      checkoutBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const plan = btn.dataset.plan;
+          document.getElementById('modalPlanTitle').textContent = plan === 'pro' ? 'Subscribe to Pro Developer' : 'Subscribe to Team Plan';
+          document.getElementById('modalPlanPrice').textContent = plan === 'pro' ? '$12.00 / month' : '$49.00 / seat / month';
+          checkoutModal?.classList.remove('hidden');
+        });
+      });
+
+      closeModal?.addEventListener('click', () => checkoutModal?.classList.add('hidden'));
+    });
+
+    // BACKGROUND CANVAS ANIMATION
+    const canvas = document.getElementById('bgCanvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const particles = Array.from({ length: 45 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 2 + 1,
+        dx: (Math.random() - 0.5) * 0.4,
+        dy: (Math.random() - 0.5) * 0.4,
+        alpha: Math.random() * 0.5 + 0.2
+      }));
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          p.x += p.dx;
+          p.y += p.dy;
+          if (p.x < 0 || p.x > width) p.dx *= -1;
+          if (p.y < 0 || p.y > height) p.dy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0, 242, 254, ${p.alpha})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+  </script>
 </body>
 </html>
