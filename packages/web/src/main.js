@@ -124,16 +124,9 @@ const badgeSnippet = document.getElementById('badgeSnippet');
 const tabButtons = document.querySelectorAll('.tab-btn');
 const btnCopySkeleton = document.getElementById('btnCopySkeleton');
 const btnCopyBadge = document.getElementById('btnCopyBadge');
-const copyCliBtn = document.getElementById('copyCliBtn');
-const cliCommandText = document.getElementById('cliCommandText');
-const pkgTabs = document.querySelectorAll('.pkg-tab');
-
-// ROI CALCULATOR ELEMENTS
-const spendSlider = document.getElementById('spendSlider');
-const spendVal = document.getElementById('spendVal');
-const roiOriginal = document.getElementById('roiOriginal');
-const roiNew = document.getElementById('roiNew');
-const roiAnnual = document.getElementById('roiAnnual');
+const btnCopyTerminal = document.getElementById('btnCopyTerminal');
+const commandSnippetText = document.getElementById('commandSnippetText');
+const toolTabs = document.querySelectorAll('.tool-tab');
 
 // MODAL ELEMENTS
 const checkoutModal = document.getElementById('checkoutModal');
@@ -163,29 +156,14 @@ function updateSkeleton() {
   badgeSnippet.textContent = `⚡ Context optimized by ContextSkeleton (Saved ${savedPct}% tokens)`;
 }
 
-function updateRoiCalculator() {
-  if (!spendSlider) return;
-  const monthlySpend = parseInt(spendSlider.value, 10);
-  const newMonthlySpend = Math.round(monthlySpend * 0.22);
-  const monthlySavings = monthlySpend - newMonthlySpend;
-  const annualSavings = monthlySavings * 12;
-
-  spendVal.textContent = `$${monthlySpend.toLocaleString()} / month`;
-  roiOriginal.textContent = `$${monthlySpend.toLocaleString()}`;
-  roiNew.textContent = `$${newMonthlySpend.toLocaleString()}`;
-  roiAnnual.textContent = `$${annualSavings.toLocaleString()} / year`;
-}
-
-// INITIALIZE PLAYGROUND & ROI
+// INITIALIZE
 if (codeInput) {
   codeInput.value = SAMPLES.ts;
   updateSkeleton();
 }
-updateRoiCalculator();
 
 // EVENT LISTENERS
 codeInput?.addEventListener('input', updateSkeleton);
-spendSlider?.addEventListener('input', updateRoiCalculator);
 
 tabButtons.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -197,16 +175,18 @@ tabButtons.forEach(btn => {
   });
 });
 
-// PACKAGE MANAGER TABS
-pkgTabs.forEach(tab => {
+// TOOLCHAIN INTEGRATION TABS (PINECONE STYLE)
+toolTabs.forEach(tab => {
   tab.addEventListener('click', () => {
-    pkgTabs.forEach(t => t.classList.remove('active'));
+    toolTabs.forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    const pkg = tab.dataset.pkg;
-    if (pkg === 'npx') cliCommandText.textContent = 'npx context-skeleton scan';
-    else if (pkg === 'bunx') cliCommandText.textContent = 'bunx context-skeleton scan';
-    else if (pkg === 'pnpm') cliCommandText.textContent = 'pnpm dlx context-skeleton scan';
-    else if (pkg === 'yarn') cliCommandText.textContent = 'yarn dlx context-skeleton scan';
+    const tool = tab.dataset.tool;
+    if (tool === 'claude') commandSnippetText.textContent = 'claude plugin install context-skeleton';
+    else if (tool === 'cursor') commandSnippetText.textContent = 'npx context-skeleton scan';
+    else if (tool === 'windsurf') commandSnippetText.textContent = 'npx @context-skeleton/mcp-server';
+    else if (tool === 'vscode') commandSnippetText.textContent = 'code --install-extension context-skeleton';
+    else if (tool === 'cli') commandSnippetText.textContent = 'npx context-skeleton scan';
+    else if (tool === 'mcp') commandSnippetText.textContent = 'npx -y @context-skeleton/mcp-server';
   });
 });
 
@@ -215,8 +195,8 @@ btnCopySkeleton?.addEventListener('click', () => {
   btnCopySkeleton.innerHTML = `✓ Copied!`;
   setTimeout(() => {
     btnCopySkeleton.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      Copy Skeletonized Context
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy Context
     `;
   }, 2000);
 });
@@ -227,10 +207,10 @@ btnCopyBadge?.addEventListener('click', () => {
   setTimeout(() => { btnCopyBadge.textContent = 'Copy Badge'; }, 2000);
 });
 
-copyCliBtn?.addEventListener('click', () => {
-  navigator.clipboard.writeText(cliCommandText.textContent);
-  copyCliBtn.style.borderColor = '#00e676';
-  setTimeout(() => { copyCliBtn.style.borderColor = ''; }, 2000);
+btnCopyTerminal?.addEventListener('click', () => {
+  navigator.clipboard.writeText(commandSnippetText.textContent);
+  btnCopyTerminal.innerHTML = `✓ Copied!`;
+  setTimeout(() => { btnCopyTerminal.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy`; }, 2000);
 });
 
 // CHECKOUT MODAL HANDLERS
