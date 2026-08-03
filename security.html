@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security & Compliance — ContextSkeleton & FunctionApp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; line-height: 1.7; color: #0f172a; max-width: 800px; margin: 4rem auto; padding: 0 2rem; }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.5px; }
+    h2 { font-size: 1.4rem; font-weight: 700; margin: 2rem 0 1rem; }
+    p { margin-bottom: 1.2rem; color: #475569; }
+    .back-link { display: inline-block; margin-bottom: 2rem; color: #0066ff; text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <a href="./index.html" class="back-link">← Back to ContextSkeleton</a>
+  <h1>Security & Compliance Policy</h1>
+  <p><strong>Published by FunctionApp</strong> (<a href="https://functionapp.in" target="_blank">functionapp.in</a>)</p>
+
+  <h2>1. Local Air-Gapped Code Processing</h2>
+  <p>Security is fundamental to ContextSkeleton. All code parsing, AST folding, and token estimation execute locally within your local Node.js process. At no point does the CLI or MCP server make outbound HTTP connections or upload source code snippets to external servers.</p>
+
+  <h2>2. Secret & API Key Protection</h2>
+  <p>When ContextSkeleton parses function implementations, secrets, credentials, or environment variables contained within function bodies are automatically stripped during implementation folding, reducing risk when sharing skeletons with AI model endpoints.</p>
+
+  <h2>3. Reporting Security Vulnerabilities</h2>
+  <p>If you discover a security vulnerability in ContextSkeleton or FunctionApp products, please report it via our platform at <a href="https://functionapp.in" target="_blank">functionapp.in</a> or create a GitHub issue on our repository.</p>
+</body>
+</html>
