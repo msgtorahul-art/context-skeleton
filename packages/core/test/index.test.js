@@ -188,9 +188,46 @@ test('Core Engine - Symbol Indexing', () => {
   assert.equal(symbols[2].name, 'secretKey');
 });
 
+test('Regression - Top-level Control-Flow Statements (if, for, while) Must NOT Be Folded', () => {
+  const topLevelCode = `
+import { initApp } from './app';
+
+if (process.env.NODE_ENV === 'production') {
+  console.log('prod mode');
+  initApp();
+}
+
+for (let i = 0; i < 3; i++) {
+  console.log('loop iteration', i);
+}
+
+while (false) {
+  console.log('unreachable');
+}
+
+export function handleRequest(req, res) {
+  const data = req.body;
+  return res.json(data);
+}
+`;
+
+  const result = skeletonize(topLevelCode, 'main.ts');
+  
+  assert.ok(result.skeletonCode.includes("if (process.env.NODE_ENV === 'production') {"), 'Top-level if signature preserved');
+  assert.ok(result.skeletonCode.includes("console.log('prod mode');"), 'Top-level if body MUST NOT be folded');
+  assert.ok(result.skeletonCode.includes('initApp();'), 'Top-level if contents preserved');
+  assert.ok(result.skeletonCode.includes("for (let i = 0; i < 3; i++) {"), 'Top-level for loop preserved');
+  assert.ok(result.skeletonCode.includes("console.log('loop iteration', i);"), 'Top-level for body MUST NOT be folded');
+  assert.ok(result.skeletonCode.includes("while (false) {"), 'Top-level while loop preserved');
+  assert.ok(result.skeletonCode.includes("console.log('unreachable');"), 'Top-level while body MUST NOT be folded');
+  assert.ok(result.skeletonCode.includes('export function handleRequest(req, res) {'), 'Function signature preserved');
+  assert.ok(result.skeletonCode.includes('folded implementation'), 'Function body MUST be folded');
+});
+
 test('Token Estimation & Financial Savings', () => {
   const savings = calculateSavings(100000, 20000, 3.00);
   assert.equal(savings.tokensSaved, 80000);
   assert.equal(savings.percentageSaved, 80);
   assert.equal(savings.dollarsSaved, 0.24);
 });
+
