@@ -2,19 +2,18 @@
   "name": "context-skeleton-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "Zero-latency AST code folding CLI, Core Engine, MCP Server & Web Visualizer for AI Agents",
+  "description": "Zero-latency structural code folding CLI, Core Engine, MCP Server & Web Visualizer for AI Agents",
   "type": "module",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
     "test": "node --test packages/core/test/index.test.js",
-    "dev:web": "npm run dev --workspace=packages/web",
+    "dev:web": "node packages/web/server.js",
     "cli": "node packages/cli/bin/context-skeleton.js"
   },
   "keywords": [
-    "ast",
+    "structural-folding",
     "mcp",
     "cursor",
     "claude-code",

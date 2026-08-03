@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 8080;
 const HOST = '127.0.0.1';
-const ROOT_DIR = __dirname;
+const ROOT_DIR = path.resolve(__dirname, '../../');
 const CORE_SRC_DIR = path.resolve(__dirname, '../core/src');
 
 const MIME_TYPES = {

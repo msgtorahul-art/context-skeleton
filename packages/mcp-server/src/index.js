@@ -17,7 +17,7 @@ export class MCPServerHandler {
       tools: [
         {
           name: 'get_repo_skeleton',
-          description: 'Generates a compressed AST code skeleton of the project repository to save 70-80% of LLM context window tokens while preserving exported signatures, methods, interfaces, and docstrings.',
+          description: 'Generates a compressed structural code skeleton of the project repository to save 70-80% of LLM context window tokens while preserving exported signatures, methods, interfaces, and docstrings.',
           inputSchema: {
             type: 'object',
             properties: {

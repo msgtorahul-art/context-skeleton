@@ -1,6 +1,7 @@
 /**
- * ContextSkeleton Core AST Engine
- * Provides intelligent AST folding, skeleton generation, token calculation, and symbol indexing.
+ * ContextSkeleton Core Engine
+ * Provides zero-dependency structural code folding, skeleton generation,
+ * token calculation, and symbol indexing.
  */
 
 import fs from 'fs';
@@ -36,23 +37,222 @@ export function calculateSavings(originalTokens, skeletonTokens, costPerMillion 
 }
 
 /**
- * Folds function and block implementations in JavaScript / TypeScript / JSX / TSX code
+ * Character scanner that counts structural braces on a line across languages (JS, TS, Go, Rust, C/C++, Java, C#),
+ * ignoring braces inside strings, template literals, comments, regexes, and Rust raw strings (r#"..."#).
  */
-function skeletonizeJS(code, options = {}) {
+function getStructuralBracesInLine(line, state, ext = '.js') {
+  let openBraces = 0;
+  let closeBraces = 0;
+  let i = 0;
+
+  while (i < line.length) {
+    const ch = line[i];
+    const next = line[i + 1];
+
+    if (state.inMultiComment) {
+      if (ch === '*' && next === '/') {
+        state.inMultiComment = false;
+        i += 2;
+      } else {
+        i++;
+      }
+      continue;
+    }
+
+    if (state.inString) {
+      if (ch === '\\') {
+        i += 2; // skip escaped character
+      } else if (ch === state.stringQuote) {
+        state.inString = false;
+        i++;
+      } else {
+        i++;
+      }
+      continue;
+    }
+
+    // Rust raw string mode r"..." or r#"..."#
+    if (state.inRustRawString) {
+      if (ch === '"') {
+        let matchingHashes = 0;
+        let idx = i + 1;
+        while (idx < line.length && line[idx] === '#') {
+          matchingHashes++;
+          idx++;
+        }
+        if (matchingHashes === state.rustRawHashes) {
+          state.inRustRawString = false;
+          i = idx;
+          continue;
+        }
+      }
+      i++;
+      continue;
+    }
+
+    // JS/TS Template literal mode (when not inside ${ ... } expression)
+    if (state.templateStack && state.templateStack.length > 0 && !state.templateStack[state.templateStack.length - 1].inExpr) {
+      if (ch === '\\') {
+        i += 2;
+      } else if (ch === '`') {
+        state.templateStack.pop();
+        i++;
+      } else if (ch === '$' && next === '{') {
+        state.templateStack[state.templateStack.length - 1].inExpr = true;
+        state.templateStack[state.templateStack.length - 1].exprDepth = 1;
+        openBraces++;
+        i += 2;
+      } else {
+        i++;
+      }
+      continue;
+    }
+
+    // Single line comments
+    if (ch === '/' && next === '/') {
+      break;
+    }
+
+    // Multi line comments
+    if (ch === '/' && next === '*') {
+      state.inMultiComment = true;
+      i += 2;
+      continue;
+    }
+
+    // Rust raw string start r" or r#"
+    if (ext === '.rs' && ch === 'r') {
+      let hashes = 0;
+      let idx = i + 1;
+      while (idx < line.length && line[idx] === '#') {
+        hashes++;
+        idx++;
+      }
+      if (line[idx] === '"') {
+        state.inRustRawString = true;
+        state.rustRawHashes = hashes;
+        i = idx + 1;
+        continue;
+      }
+    }
+
+    // JS/TS Regex literal detection heuristic
+    if (['.js', '.ts', '.jsx', '.tsx'].includes(ext) && ch === '/') {
+      const prevChars = line.substring(0, i).trim();
+      const lastChar = prevChars[prevChars.length - 1];
+      if (i === 0 || '=:(,{[!;&|'.includes(lastChar)) {
+        i++;
+        while (i < line.length) {
+          if (line[i] === '\\') {
+            i += 2;
+          } else if (line[i] === '/') {
+            i++;
+            while (i < line.length && /[a-z]/i.test(line[i])) i++;
+            break;
+          } else {
+            i++;
+          }
+        }
+        continue;
+      }
+    }
+
+    // String literal start
+    if (ch === "'" || ch === '"') {
+      state.inString = true;
+      state.stringQuote = ch;
+      i++;
+      continue;
+    }
+
+    // JS/TS Template literal start
+    if (['.js', '.ts', '.jsx', '.tsx'].includes(ext) && ch === '`') {
+      if (!state.templateStack) state.templateStack = [];
+      state.templateStack.push({ inExpr: false, exprDepth: 0 });
+      i++;
+      continue;
+    }
+
+    // Structural braces count
+    if (ch === '{') {
+      openBraces++;
+      if (state.templateStack && state.templateStack.length > 0 && state.templateStack[state.templateStack.length - 1].inExpr) {
+        state.templateStack[state.templateStack.length - 1].exprDepth++;
+      }
+    } else if (ch === '}') {
+      closeBraces++;
+      if (state.templateStack && state.templateStack.length > 0 && state.templateStack[state.templateStack.length - 1].inExpr) {
+        state.templateStack[state.templateStack.length - 1].exprDepth--;
+        if (state.templateStack[state.templateStack.length - 1].exprDepth === 0) {
+          state.templateStack[state.templateStack.length - 1].inExpr = false;
+        }
+      }
+    }
+
+    i++;
+  }
+
+  return { openBraces, closeBraces };
+}
+
+/**
+ * Container blocks (impl, trait, class, interface, namespace) that contain internal methods/functions
+ */
+function isContainerSignature(trimmed, ext) {
+  if (ext === '.rs') {
+    return /^(pub(\([^)]*\))?\s+)?(impl|trait)\b/.test(trimmed);
+  }
+  if (ext === '.go') {
+    return false;
+  }
+  return /^(export\s+)?(default\s+)?(class|interface|namespace|module)\b/.test(trimmed) && !trimmed.includes('(');
+}
+
+/**
+ * Language-aware function/method signature detector
+ */
+function isFunctionSignature(trimmed, ext) {
+  if (ext === '.go') {
+    return /^func\s+/.test(trimmed);
+  }
+  if (ext === '.rs') {
+    return /^(pub(\([^)]*\))?\s+)?(async\s+|const\s+|unsafe\s+)?(fn)\b/.test(trimmed);
+  }
+  if (['.java', '.c', '.cpp', '.cs'].includes(ext)) {
+    return /^(public|private|protected|static|final|virtual|override|async|void|int|char|bool|float|double|auto|template|\w+)\s+/.test(trimmed) && trimmed.includes('(');
+  }
+  // Default JS/TS function detector
+  return /^(export\s+)?(async\s+)?(function|const\s+\w+\s*=\s*(async\s*)?\([^)]*\)\s*=>)/.test(trimmed) ||
+         /^(public|private|protected|static|async|get|set|constructor)?\s*\w+\s*\([^)]*\)\s*(\{|=)/.test(trimmed);
+}
+
+/**
+ * Universal Structural Code Folding for C-style languages (JS/TS, Go, Rust, Java, C/C++, C#)
+ */
+function skeletonizeCStyle(code, filename = 'code.js', options = {}) {
+  const ext = path.extname(filename).toLowerCase();
   const lines = code.split('\n');
   const result = [];
   let inFunction = false;
+  let inPendingSignature = false;
   let blockDepth = 0;
   let foldContentLines = 0;
   let currentComment = [];
+
+  const state = {
+    inMultiComment: false,
+    inString: false,
+    stringQuote: '',
+    inRustRawString: false,
+    rustRawHashes: 0,
+    templateStack: []
+  };
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const trimmed = line.trim();
 
-    // Track braces
-    const openBraces = (line.match(/\{/g) || []).length;
-    const closeBraces = (line.match(/\}/g) || []).length;
+    const { openBraces, closeBraces } = getStructuralBracesInLine(line, state, ext);
 
     if (inFunction) {
       blockDepth += (openBraces - closeBraces);
@@ -69,38 +269,55 @@ function skeletonizeJS(code, options = {}) {
       continue;
     }
 
-    // Preserve comments attached to top-level signatures
-    if (trimmed.startsWith('//') || trimmed.startsWith('/*') || trimmed.startsWith('*')) {
+    // Preserve comments attached to top-level signatures (including /// and //!)
+    if (trimmed.startsWith('//') || trimmed.startsWith('/*') || trimmed.startsWith('*') || trimmed.startsWith('#')) {
       if (options.preserveDocstrings !== false) {
         currentComment.push(line);
       }
       continue;
     }
 
-    // Detect signatures: function, class methods, arrow functions, async methods
-    const isSignature = /^(export\s+)?(async\s+)?(function|class|interface|type|enum|const\s+\w+\s*=\s*(async\s*)?\([^)]*\)\s*=>)/.test(trimmed) ||
-                        /^(public|private|protected|static|async|get|set)?\s*\w+\s*\([^)]*\)\s*(\{|=)/.test(trimmed);
-
-    // Signature opening block condition
-    const hasOpeningBrace = line.includes('{');
-    if (isSignature && hasOpeningBrace) {
-      inFunction = true;
-      blockDepth = Math.max(1, openBraces - closeBraces);
-      foldContentLines = 0;
-
+    // Container blocks (impl, class, trait) pass through so methods inside can be folded individually
+    if (isContainerSignature(trimmed, ext)) {
       if (currentComment.length > 0) {
         result.push(...currentComment);
         currentComment = [];
       }
-
-      // Print signature up to opening brace
-      const braceIndex = line.lastIndexOf('{');
-      if (braceIndex !== -1) {
-        result.push(line.substring(0, braceIndex + 1));
-      } else {
-        result.push(line);
-      }
+      result.push(line);
       continue;
+    }
+
+    const isFuncSig = isFunctionSignature(trimmed, ext);
+
+    if (inPendingSignature || isFuncSig) {
+      const hasOpeningBrace = line.includes('{');
+      if (hasOpeningBrace) {
+        inPendingSignature = false;
+        inFunction = true;
+        blockDepth = Math.max(1, openBraces - closeBraces);
+        foldContentLines = 0;
+
+        if (currentComment.length > 0) {
+          result.push(...currentComment);
+          currentComment = [];
+        }
+
+        const braceIndex = line.lastIndexOf('{');
+        if (braceIndex !== -1) {
+          result.push(line.substring(0, braceIndex + 1));
+        } else {
+          result.push(line);
+        }
+        continue;
+      } else {
+        inPendingSignature = true;
+        if (currentComment.length > 0) {
+          result.push(...currentComment);
+          currentComment = [];
+        }
+        result.push(line);
+        continue;
+      }
     }
 
     if (currentComment.length > 0) {
@@ -115,7 +332,14 @@ function skeletonizeJS(code, options = {}) {
 }
 
 /**
- * Folds function and class implementations in Python code
+ * Folds function and block implementations in JavaScript / TypeScript / JSX / TSX code
+ */
+function skeletonizeJS(code, filename = 'code.js', options = {}) {
+  return skeletonizeCStyle(code, filename, options);
+}
+
+/**
+ * Folds function and class implementations in Python code with multi-line docstring awareness
  */
 function skeletonizePython(code, options = {}) {
   const lines = code.split('\n');
@@ -123,10 +347,35 @@ function skeletonizePython(code, options = {}) {
   let inDef = false;
   let defIndent = 0;
   let foldContentLines = 0;
+  let inTripleQuote = false;
+  let tripleQuoteStr = '';
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const trimmed = line.trim();
+
+    // Check multi-line triple-quoted docstrings
+    if (inTripleQuote) {
+      result.push(line);
+      if (trimmed.includes(tripleQuoteStr)) {
+        inTripleQuote = false;
+      }
+      continue;
+    }
+
+    const tripleMatch = trimmed.match(/^"""|^'''/);
+    if (tripleMatch) {
+      const quote = tripleMatch[0];
+      const rest = trimmed.substring(3);
+      if (!rest.includes(quote)) {
+        inTripleQuote = true;
+        tripleQuoteStr = quote;
+      }
+      if (inDef && foldContentLines === 0) {
+        result.push(line);
+        continue;
+      }
+    }
 
     if (!trimmed) {
       if (!inDef) result.push(line);
@@ -180,27 +429,19 @@ function skeletonizePython(code, options = {}) {
 }
 
 /**
- * Folds function implementations in Go / Rust code
- */
-function skeletonizeCStyle(code, options = {}) {
-  return skeletonizeJS(code, options);
-}
-
-/**
- * Main AST Skeletonizer API
+ * Main Skeletonizer API
  */
 export function skeletonize(code, filename = 'code.js', options = {}) {
   const ext = path.extname(filename).toLowerCase();
   let skeletonCode = code;
 
   if (['.js', '.ts', '.jsx', '.tsx', '.mjs', '.cjs'].includes(ext)) {
-    skeletonCode = skeletonizeJS(code, options);
+    skeletonCode = skeletonizeJS(code, filename, options);
   } else if (['.py'].includes(ext)) {
     skeletonCode = skeletonizePython(code, options);
   } else if (['.go', '.rs', '.java', '.c', '.cpp', '.cs'].includes(ext)) {
-    skeletonCode = skeletonizeCStyle(code, options);
+    skeletonCode = skeletonizeCStyle(code, filename, options);
   } else {
-    // Generic fallback: pass-through or basic line cap
     skeletonCode = code;
   }
 
@@ -252,7 +493,6 @@ export function skeletonizeDirectory(dirPath, options = {}) {
         if (validExts.has(ext)) {
           try {
             const content = fs.readFileSync(fullPath, 'utf8');
-            // Ignore files larger than 1MB
             if (content.length > 1_000_000) continue;
 
             const res = skeletonize(content, entry.name, options);
@@ -290,7 +530,7 @@ export function indexSymbols(code, filename = 'code.js') {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
-    const match = line.match(/(?:export\s+)?(?:async\s+)?(function|class|const|let|var|interface|type)\s+([A-Za-z0-9_$]+)/);
+    const match = line.match(/(?:export\s+)?(?:async\s+)?(function|class|const|let|var|interface|type|func|pub\s+fn)\s+([A-Za-z0-9_$]+)/);
     if (match) {
       symbols.push({
         name: match[2],
