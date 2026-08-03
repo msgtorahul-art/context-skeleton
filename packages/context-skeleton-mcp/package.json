@@ -1,0 +1,25 @@
+{
+  "name": "context-skeleton-mcp",
+  "version": "1.0.0",
+  "description": "Zero-dependency Model Context Protocol (MCP) Stdio Server for ContextSkeleton",
+  "type": "module",
+  "main": "./src/core.js",
+  "bin": {
+    "context-skeleton-mcp": "./bin/mcp-server.js"
+  },
+  "scripts": {
+    "build": "cp ../core/src/index.js ./src/core.js",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "structural-code-folding",
+    "cursor",
+    "claude-code",
+    "windsurf",
+    "ai-agent"
+  ],
+  "author": "FunctionApp (functionapp.in)",
+  "license": "MIT"
+}

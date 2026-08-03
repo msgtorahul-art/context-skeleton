@@ -44,7 +44,7 @@ Add to your `claude_desktop_config.json` or `.cursorrules`:
   "mcpServers": {
     "context-skeleton": {
       "command": "npx",
-      "args": ["-y", "@context-skeleton/mcp-server"]
+      "args": ["-y", "context-skeleton-mcp"]
     }
   }
 }
