@@ -50,11 +50,11 @@ Instead of dumping 500 lines of implementation into your prompt, ContextSkeleton
 The AI gets 100% of the architectural blueprint at a fraction of the token cost. (2/5)
 
 **Tweet 3:**  
-⚡ Benchmarks on `@context-skeleton/core`:  
-• Original Code: 2,160 tokens  
-• Skeletonized: 252 tokens  
-• **Reduction: 88.3%**  
-• Execution Latency: 0.4ms  
+⚡ Benchmarks on real production codebases:  
+• Blended Benchmark Average: 67% Token Reduction  
+• Production Modules: 45% to 70% Savings  
+• Large Implementation Files: Up to 90%+ Savings  
+• Execution Latency: ~0.4ms  
 
 No API costs. 100% offline & local. (3/5)
 
