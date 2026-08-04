@@ -1,6 +1,8 @@
+import fs from 'fs';
+import path from 'path';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { skeletonize, estimateTokens, calculateSavings, indexSymbols } from '../src/index.js';
+import { skeletonize, estimateTokens, calculateSavings, indexSymbols, skeletonizeDirectory } from '../src/index.js';
 
 test('Core Engine - JavaScript / TypeScript Folding', () => {
   const code = `
@@ -265,11 +267,31 @@ export const FINAL_VAL = 99;
   assert.ok(result.skeletonCode.includes('export const FINAL_VAL = 99;'), 'FINAL_VAL preserved');
 });
 
+test('Regression - skeletonizeDirectory Ignores 0-byte Files and Output Redirect Files', () => {
+  const tmpDir = path.resolve('./scratch/empty_file_test');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  
+  const validFile = path.join(tmpDir, 'valid.ts');
+  const emptyFile = path.join(tmpDir, 'output.md');
+  
+  fs.writeFileSync(validFile, 'export function foo() {\n  return 1;\n}');
+  fs.writeFileSync(emptyFile, ''); // 0-byte file created by shell redirect > output.md
+
+  const result = skeletonizeDirectory(tmpDir, { outFile: emptyFile });
+  
+  assert.equal(result.filesCount, 1, 'Should process only 1 valid file and skip empty redirect target');
+  assert.equal(result.fileResults[0].filename, 'valid.ts');
+
+  // Clean up
+  fs.rmSync(tmpDir, { recursive: true, force: true });
+});
+
 test('Token Estimation & Financial Savings', () => {
   const savings = calculateSavings(100000, 20000, 3.00);
   assert.equal(savings.tokensSaved, 80000);
   assert.equal(savings.percentageSaved, 80);
   assert.equal(savings.dollarsSaved, 0.24);
 });
+
 
 

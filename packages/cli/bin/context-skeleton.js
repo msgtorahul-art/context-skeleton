@@ -67,7 +67,9 @@ if (command === 'scan' || command === 'copy') {
     process.exit(1);
   }
 
-  const result = skeletonizeDirectory(targetDir);
+  const outFileArg = args.indexOf('--out');
+  const outFile = outFileArg !== -1 && args[outFileArg + 1] ? path.resolve(args[outFileArg + 1]) : null;
+  const result = skeletonizeDirectory(targetDir, { outFile });
 
   if (args.includes('--json')) {
     console.log(JSON.stringify(result, null, 2));
@@ -83,11 +85,9 @@ if (command === 'scan' || command === 'copy') {
     formattedOutput += `\`\`\`${ext}\n${file.skeletonCode}\n\`\`\`\n\n`;
   }
 
-  const outFileArg = args.indexOf('--out');
-  if (outFileArg !== -1 && args[outFileArg + 1]) {
-    const outPath = path.resolve(args[outFileArg + 1]);
-    fs.writeFileSync(outPath, formattedOutput, 'utf8');
-    console.log(`\x1b[32m✔ Skeleton saved to ${outPath}\x1b[0m`);
+  if (outFile) {
+    fs.writeFileSync(outFile, formattedOutput, 'utf8');
+    console.log(`\x1b[32m✔ Skeleton saved to ${outFile}\x1b[0m`);
   }
 
   if (command === 'copy') {

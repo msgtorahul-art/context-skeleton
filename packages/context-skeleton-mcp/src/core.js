@@ -516,8 +516,10 @@ export function skeletonizeDirectory(dirPath, options = {}) {
         const ext = path.extname(entry.name).toLowerCase();
         if (validExts.has(ext)) {
           try {
+            if (options.outFile && path.resolve(fullPath) === path.resolve(options.outFile)) continue;
+
             const content = fs.readFileSync(fullPath, 'utf8');
-            if (content.length > 1_000_000) continue;
+            if (content.length > 1_000_000 || content.trim().length === 0) continue;
 
             const res = skeletonize(content, entry.name, options);
             res.relativePath = path.relative(dirPath, fullPath);
