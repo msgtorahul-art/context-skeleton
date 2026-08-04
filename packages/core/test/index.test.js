@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'node:os';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { skeletonize, estimateTokens, calculateSavings, indexSymbols, skeletonizeDirectory } from '../src/index.js';
@@ -268,7 +269,7 @@ export const FINAL_VAL = 99;
 });
 
 test('Regression - skeletonizeDirectory Ignores 0-byte Files and Output Redirect Files', () => {
-  const tmpDir = path.resolve('./scratch/empty_file_test');
+  const tmpDir = path.join(os.tmpdir(), `cs-test-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`);
   fs.mkdirSync(tmpDir, { recursive: true });
   
   const validFile = path.join(tmpDir, 'valid.ts');
@@ -283,7 +284,11 @@ test('Regression - skeletonizeDirectory Ignores 0-byte Files and Output Redirect
   assert.equal(result.fileResults[0].filename, 'valid.ts');
 
   // Clean up
-  fs.rmSync(tmpDir, { recursive: true, force: true });
+  try {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  } catch {
+    // Safe fallback if OS holds file lock
+  }
 });
 
 test('Token Estimation & Financial Savings', () => {
